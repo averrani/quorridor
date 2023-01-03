@@ -78,7 +78,6 @@ void printBoard(Item *node)
 }
 double evaluateBoard(Item *node)
 {
-  
   if (0<node->player2.pos<17)
   {
     printf("PLayer 2 win");
