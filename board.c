@@ -77,7 +77,24 @@ void printBoard(Item *node)
   }
   printf("\n");
 }
+double evaluateBoard(Item *node)
+{
+  // int nb = WH_BOARD, i;  
+  if (node->board[MAX_BOARD-1])
+  {
+    return 1;
+  }
+  /*for (i = 0; i < MAX_BOARD; i++)
+  {
+    if (node->board[i] == 1)
+    {
+      nb--;
+    }
+  }
+  return nb;*/
+}
 
+//START CHANGE
 // initialize node's state from a given board
 void initBoard(Item *node, char *board)
 {
@@ -110,22 +127,7 @@ else{
 
 // Return 1 if knight is at the last 
 // 
-double evaluateBoard(Item *node)
-{
- // int nb = WH_BOARD, i;  
-  if (node->board[MAX_BOARD-1])
-  {
-    return 1;
-  }
-  /*for (i = 0; i < MAX_BOARD; i++)
-  {
-    if (node->board[i] == 1)
-    {
-      nb--;
-    }
-  }
-  return nb;*/
-}
+
 
 // Test if position pos is valid with respect to node's state
 // nQueens -> not same row ; not same column ; not same diagonal
