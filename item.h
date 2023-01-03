@@ -1,3 +1,5 @@
+#include "player.h"
+
 #ifndef ITEM_H
 #define ITEM_H
 
@@ -6,6 +8,8 @@ struct Item_s;
 
 
 typedef struct Item_s {
+  Player player1;
+  Player player2;
   int size; 
   int wall;//number of wall you can place
   char *board; // board is an array of small int

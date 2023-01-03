@@ -15,11 +15,11 @@ Item *initGame()
   Player player1;
   Player player2;
 
-  player1.pos=9;//define pos of player1
+  player1.pos=26;//define pos of player1
   player1.turn=1;//first turn to player1
   player1.wall=10;//number of wall
 
-  player2.pos=280; //define pos of player2
+  player2.pos=297; //define pos of player2
   player2.turn=0;//first turn to player1
   player2.wall=10;//number of wall
 
@@ -79,19 +79,12 @@ void printBoard(Item *node)
 }
 double evaluateBoard(Item *node)
 {
-  // int nb = WH_BOARD, i;  
-  if (node->board[MAX_BOARD-1])
+  
+  if (node.)
   {
     return 1;
   }
-  /*for (i = 0; i < MAX_BOARD; i++)
-  {
-    if (node->board[i] == 1)
-    {
-      nb--;
-    }
-  }
-  return nb;*/
+  
 }
 
 //START CHANGE
