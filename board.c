@@ -12,16 +12,15 @@ Item *initGame()
   int i;
   Item *node;
 
-  Player player1;
-  Player player2;
+  
 
-  player1.pos=26;//define pos of player1
-  player1.turn=1;//first turn to player1
-  player1.wall=10;//number of wall
+  node->player1.pos=25;//define pos of player1
+  node->player1.turn=1;//first turn to player1
+  node->player1.wall=10;//number of wall
 
-  player2.pos=297; //define pos of player2
-  player2.turn=0;//first turn to player1
-  player2.wall=10;//number of wall
+  node->player2.pos=298; //define pos of player2
+  node->player2.turn=0;//first turn to player1
+  node->player2.wall=10;//number of wall
 
 
 
@@ -36,8 +35,8 @@ Item *initGame()
   }
   
   node = nodeAlloc();
-  initial[player1.pos]=1;
-  initial[player2.pos]=2;
+  initial[node->player1.pos]=1;
+  initial[node->player2.pos]=2;
   initBoard(node, initial);
 
   node->depth = 0;
@@ -80,8 +79,14 @@ void printBoard(Item *node)
 double evaluateBoard(Item *node)
 {
   
-  if (node.)
+  if (0<node->player2.pos<17)
   {
+    printf("PLayer 2 win");
+    return 1;
+  }
+  if (305<node->player2.pos<322)
+  {
+    printf("PLayer 1 win");
     return 1;
   }
   
