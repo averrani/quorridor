@@ -6,9 +6,9 @@ struct Player_s;
 
 
 typedef struct Player_s {
-  int turn; 
+  int turn; //0 if its not ur turn 1 if its ur turn
   int wall;//number of wall you can place
-  int pos;
+  int pos;//pos of the player in the board
 } Player;
 
 #endif 
