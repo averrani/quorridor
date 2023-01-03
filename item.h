@@ -6,7 +6,7 @@ struct Item_s;
 
 
 typedef struct Item_s {
-  const int size; 
+  int size; 
   int wall;//number of wall you can place
   char *board; // board is an array of small int
   int blank;
