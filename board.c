@@ -159,19 +159,19 @@ int isValidPosition(Item *node, int pos)
      if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
     {
 
-      if (node->player2.pos - pos == 2 && node->player2.pos + 1 != -2) // test 1st legal move
+      if (node->player2.pos - pos == 2 && node->player2.pos - 1 != -2) // test 1st legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == -2 && node->player2.pos - 1 != -2) // test 2nd legal move
+      if (node->player2.pos - pos == -2 && node->player2.pos + 1 != -2) // test 2nd legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == 34 && node->player2.pos + 17 != -2) // test 3rd legal move
+      if (node->player2.pos - pos == 34 && node->player2.pos - 17 != -2) // test 3rd legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == -34 && node->player2.pos - 17 != -2) // test 4th legal move
+      if (node->player2.pos - pos == -34 && node->player2.pos + 17 != -2) // test 4th legal move
       {
         return 1;
       }
