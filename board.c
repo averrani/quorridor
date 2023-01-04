@@ -72,6 +72,7 @@ void printBoard(Item *node)
   }
   printf("\n");
 }
+
 double evaluateBoard(Item *node)
 {
   if (0 < node->player2.pos < 17)
@@ -102,18 +103,35 @@ void initBoard(Item *node, char *board)
       node->board[i] = board[i];
     }
   }
-  else
-  {
-    for (i = 0; i < MAX_BOARD; i++)
-    {
-      node->board[i] = 0;
-    }
-  }
 
-  /*for (i = 0; i < MAX_BOARD; i++)
-    {
-      node->board[i] = board[i];
-    }*/
+
+
+  if (board==NULL)
+  {
+
+  node->player1.pos = 25;  // define pos of player1
+  node->player1.turn = 1;  // first turn to player1
+  node->player1.wall = 10; // number of wall
+
+  node->player2.pos = 298; // define pos of player2
+  node->player2.turn = 0;  // first turn to player1
+  node->player2.wall = 10; // number of wall
+
+
+  for (int i = 0; i < MAX_BOARD; i = i + 2)
+  {
+    node->board[i] = 0; // define where the player can move I START AT 0 AND I+2
+  }
+  for (int i = 1; i < MAX_BOARD; i = i + 2)
+  {
+    node->board[i] = -1; // define where the player can place wall I START AT 1 AND I+2
+  }
+  
+  node->board[node->player1.pos] = 1;
+  node->board[node->player2.pos] = 2;
+  }
+  
+  
 }
 
 // Return 1 if knight is at the last
