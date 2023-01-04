@@ -27,11 +27,11 @@ Item *initGame()
   char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
   for (int i = 0; i < MAX_BOARD; i=i+2)
     {
-      initial[i] = 0;//define where the player can move
+      initial[i] = 0;//define where the player can move I START AT 0 AND I+2
     }
   for ( int i = 1; i < MAX_BOARD; i=i+2)
   {
-    initial[i]=-1; //define where the player can place wall
+    initial[i]=-1; //define where the player can place wall I START AT 1 AND I+2
   }
   
   node = nodeAlloc();
@@ -132,30 +132,42 @@ int isValidPosition(Item *node, int pos)
 {
   int ii = pos / WH_BOARD;
   int jj = pos % WH_BOARD;
-  // la reine a testé est en position node->board[ii][jj]
+  //testé si la position a testé est derriere le player1 ou a droite du player1 avant de testé si y'a des murs
 
-  for (int i = 0; i < WH_BOARD; i++)
-  {
-    for (int j = 0; j < WH_BOARD; j++)
-    {
-      /*if (j == jj && node->board[i * WH_BOARD + j] == 1 && )
-      {
-        return 0;
-      }
-      else if (i == ii && node->board[i * WH_BOARD + j] == 1)
-      {
-        return 0;
-      }*/
-     
-      if ((abs(ii - i) * abs(j - jj))==2 && node->board[i * WH_BOARD + j] == 1)
+if (abs(node->player1.pos-pos)==2 || abs(node->player1.pos-pos)==34 )
+{
+ 
+    if (node->player1.pos-pos == 2 && node->player1.pos+1 != -2 ) //test 1st legal move 
       {
         return 1;
       
       }
-    }
-  }
-  return 0;
+      if (node->player1.pos-pos == -2 && node->player1.pos-1 != -2 )//test 2nd legal move
+      {
+        return 1;
+      
+      }
+      if(node->player1.pos-pos==34 && node->player1.pos+17 != -2)//test 3rd legal move
+      {
+        return 1;
+      }
+      if (node->player1.pos-pos==-34 && node->player1.pos-17 != -2)//test 4th legal move
+      {
+        return 1;
+      }
+ }
+ 
+        //test si y'a pas de mur en premier puis test si y'a pas le joueur adverse sur la case   
+        //-2 where there is a wall  
+        //1 where there is a player
+      
+      
+     return 0;
+  
 }
+
+  
+ 
 
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard(Item *node, int pos)
