@@ -6,7 +6,7 @@ list.o: list.c list.h
 board.o: board.c board.h
 	gcc -c board.c
 
-quorridor: quorridor.c board.c list.c board.h list.h item.h
+quorridor: quorridor.c board.c list.c board.h list.h item.h player.h 
 	gcc -o quorridor quorridor.c board.c list.c
 
 clean: 

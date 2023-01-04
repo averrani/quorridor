@@ -9,7 +9,7 @@
 Item *initGame()
 {
 
-  int i;
+  int i,j;
   Item *node;
 
   node->player1.pos = 25;  // define pos of player1
@@ -21,7 +21,23 @@ Item *initGame()
   node->player2.wall = 10; // number of wall
 
   char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
-  for (int i = 0; i < MAX_BOARD; i = i + 2)
+
+  int ii, jj;
+  for (i=0; i<MAX_BOARD; i++) {
+    if(i%2 == 0){
+      initial[i] = 0;
+    }
+    else
+      initial[i] = -1;
+    ii = i / WH_BOARD;
+	  jj = i % WH_BOARD;
+
+    if((jj+1)%2 == 0){
+      initial[i] = -1;
+    }
+  }
+
+  /*for (int i = 0; i < MAX_BOARD; i = i + 2)
   {
     initial[i] = 0; // define where the player can move I START AT 0 AND I+2
   }
@@ -29,6 +45,7 @@ Item *initGame()
   {
     initial[i] = -1; // define where the player can place wall I START AT 1 AND I+2
   }
+  */
 
   node = nodeAlloc();
   initial[node->player1.pos] = 1;
