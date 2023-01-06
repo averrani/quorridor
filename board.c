@@ -12,7 +12,7 @@ Item *initGame()
   int i,j;
   Item *node;
 
-  node->player1.pos = 25;  // 25 c'est un mur donc +17 parce que 0 a 17 reservé pour la ligne d'arrivé du joueur 2
+  node->player1.pos = ;  // 25 c'est un mur donc +17 parce que 0 a 17 reservé pour la ligne d'arrivé du joueur 2
   node->player1.turn = 1;  // first turn to player1
   node->player1.wall = 10; // number of wall
 
