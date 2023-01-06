@@ -1,5 +1,5 @@
 #include "list.h"
-
+#include "player.h"
 
 #define RANDINIT()  srand(time(NULL))
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
