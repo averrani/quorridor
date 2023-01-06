@@ -12,15 +12,15 @@ Item *initGame()
   int i, j;
   Item *node;
 
-  node->player1.pos = 41;  // 25 c'est un mur donc +17 parce que 0 a 17 reservé pour la ligne d'arrivé du joueur 2
+  node->player1.pos = 8;  //
   node->player1.turn = 1;  // first turn to player1
   node->player1.wall = 10; // number of wall
 
-  node->player2.pos = 398; // 298 c'est un lmur aussi donc -17 parce que 306 a 322 reserve ligne d'arrivé player1
+  node->player2.pos = 279; //  c'est un lmur aussi donc -17 parce que 306 a 322 reserve ligne d'arrivé player1
   node->player2.turn = 0;       // first turn to player1
   node->player2.wall = 10;      // number of wall
 
-  char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
+  char *initial = (char *)malloc(MAX_BOARD * sizeof(char));//BOARD DU JEU POUR JONNY
 
   int ii, jj;
   for (i = 0; i < MAX_BOARD; i++)
@@ -100,7 +100,7 @@ double evaluateBoard(Item *node)
     printf("PLayer 2 win");
     return 1;
   }
-  if (305 < node->player2.pos < 322)
+  if (271< node->player2.pos <=288 )
   {
     printf("PLayer 1 win");
     return 1;
@@ -127,11 +127,11 @@ void initBoard(Item *node, char *board)
   if (board == NULL)
   {
 
-    node->player1.pos = 42;  // 25 c'est un mur donc +17 parce que 0 a 17 reservé pour la ligne d'arrivé du joueur 2
+    node->player1.pos =9;  // 0 16 ligne d'arrivé +17 ligne de mur +9 ligne millieu ligne de départ
     node->player1.turn = 1;  // first turn to player1
     node->player1.wall = 10; // number of wall
 
-    node->player2.pos = 398; // 298 c'est un lmur aussi donc -17 parce que 306 a 322 reserve ligne d'arrivé player1
+    node->player2.pos = 279; // meme chose qu'au dessus a l'envers
     node->player2.turn = 0;  // first turn to player1
     node->player2.wall = 10; // number of wall
 

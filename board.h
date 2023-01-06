@@ -5,7 +5,7 @@
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
 #define RANDMAX(x)  (int)((float)(x)*rand()/(RAND_MAX+1.0))
 
-#define MAX_BOARD 442//plateau contenant la place pour les murs et les case pour se deplacer
+#define MAX_BOARD 289 //plateau contenant la place pour les murs et les case pour se deplacer
 #define WH_BOARD 17//largeur du plateau avec les murs toujours impair car on peut pas placer 
 //de murs sur les cotés
 
