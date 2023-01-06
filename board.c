@@ -10,33 +10,38 @@ Item *initGame()
 {
 
   int i, j;
-  Item *node;
+  Item *node; //on crée un node
+  node = nodeAlloc(); //on l'alloue
 
-  node->player1.pos = 8;  //
-  node->player1.turn = 1;  // first turn to player1
-  node->player1.wall = 10; // number of wall
+  //On definie les caractéristique du node précédemment alloué
 
-  node->player2.pos = 279; //  c'est un lmur aussi donc -17 parce que 306 a 322 reserve ligne d'arrivé player1
-  node->player2.turn = 0;       // first turn to player1
-  node->player2.wall = 10;      // number of wall
+  //Player 1
+  node->player1.pos = 8;  //position de départ du joueur 1
+  node->player1.turn = 1;  // le premier coup appartient au joueur 1
+  node->player1.wall = 10; // nombre de mur à placer disponible du joueur 1
 
-  char *initial = (char *)malloc(MAX_BOARD * sizeof(char));//BOARD DU JEU POUR JONNY
+  //Player 2
+  node->player2.pos = 280; //position de départ du joueur 2 : 17*16+8
+  node->player2.turn = 0; // le premier coup n'appartient pas au joueur 2
+  node->player2.wall = 10; // nombre de mur à placer disponible du joueur 2
+
+  char *initial = (char *)malloc(MAX_BOARD * sizeof(char));//Board du jeu
 
   int ii, jj;
   for (i = 0; i < MAX_BOARD; i++)
   {
     if (i % 2 == 0)
     {
-      initial[i] = 0;
+      initial[i] = 0; //on initialise à 0 toutes les cases d'indice pair
     }
     else
       initial[i] = -1;
     ii = i / WH_BOARD;
     jj = i % WH_BOARD;
 
-    if ((jj + 1) % 2 == 0)
+    if ((jj + 1) % 2 == 0) //si ligne impair
     {
-      initial[i] = -1;
+      initial[i] = -1;//il s'agit d'un emplacement de mur, on initialise à -1
     }
   }
 
@@ -50,7 +55,6 @@ Item *initGame()
   }
   */
 
-  node = nodeAlloc();
   initial[node->player1.pos] = 1;
   initial[node->player2.pos] = 2;
   initBoard(node, initial);
