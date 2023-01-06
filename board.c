@@ -109,6 +109,7 @@ double evaluateBoard(Item *node)
     printf("PLayer 1 win");
     return 1;
   }
+  return 0;
 }
 
 // START CHANGE
