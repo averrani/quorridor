@@ -15,8 +15,8 @@ typedef struct Player_s {
 } Player;
 
 
-void putStick(Item *node , int pos);
-void makeMove(Item *node , int pos);
+void putStick(Item *node , int pos);  // placer un mur 
+void makeMove(Item *node , int pos);  // déplacer son pion 
 
 
 
