@@ -68,6 +68,7 @@ Item *initGame()
 void printBoard(Item *node)
 {
   assert(node);
+  //affichage séparateurs horizontaux
   printf("\n");
   for (int j = 0; j < WH_BOARD; j++)
     if (j == 0)
@@ -75,6 +76,9 @@ void printBoard(Item *node)
     else
       printf("____");
   printf("\n");
+
+  //affichage séparateurs verticaux
+
   for (int i = 0; i < MAX_BOARD; i++)
   {
     if (i % WH_BOARD == 0)
@@ -83,6 +87,8 @@ void printBoard(Item *node)
       printf("   |");
     else
       printf("%2d |", node->board[i]);
+
+    
     if (((i + 1) % WH_BOARD) == 0)
     {
       printf("\n");
