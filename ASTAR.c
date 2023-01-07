@@ -54,7 +54,7 @@ struct route {
     double d;
 };
 
-int main() {
+int algoAstar() {
     int i, j, k, l, b, found;
     int p_len = 0;
     int * path = NULL;

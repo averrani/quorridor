@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
+#include "player.h"
 #include "board.h"
 
 // Initialize a new Game for the nQueens problem: an empty board..
@@ -238,9 +239,9 @@ Item *getChildBoard(Item *node, int pos)
   {
     /* allocate and init child node */
     child_p = nodeAlloc();
-    initBoard(child_p, NULL);
+    initBoard(child_p, node->board);
     /* Make move */
-    child_p->board[pos] = 1;
+    
     /* link child to parent for backtrack */
     child_p->parent = node;
 

@@ -14,4 +14,15 @@ typedef struct Player_s {
   int pos;//pos of the player in the board
 } Player;
 
+
+void putStick(Item *node , int pos);  // placer un mur 
+void makeMove(Item *node , int pos);  // déplacer son pion 
+
+
+
+
+
+
+
+
 #endif 
