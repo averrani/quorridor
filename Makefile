@@ -1,15 +1,18 @@
-all: quorridor board.o list.o
+all: Quorridor Board.o List.o
 
-list.o: list.c list.h
-	gcc -c list.c
+List.o: List.c List.h
+	gcc -c List.c
 
-board.o: board.c board.h
-	gcc -c board.c
+Board.o: Board.c Board.h
+	gcc -c Board.c -o Board.o
 
-quorridor: quorridor.c board.c list.c board.h list.h item.h player.h 
-	gcc -o quorridor quorridor.c board.c list.c
+Quorridor: Quorridor.c Board.c List.c Board.h List.h Item.h Player.h 
+	gcc -o Quorridor Quorridor.c Board.c List.c
+
+Item.o: Item.h
+	gcc -o Item.h
 
 clean: 
-	rm *.o quorridor
+	rm *.o Quorridor
 
 
