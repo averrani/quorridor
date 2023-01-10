@@ -17,5 +17,4 @@ void initBoard(Item *node, char *board);
 Item *getChildBoard( Item *node, int pos );
 double evaluateBoard( Item *node );
 void printBoard( Item *board );
-int isValidPositionMove(Item *node, int pos);
-int isValidPositionWall(Item *node, int pos, int dir);
+int isValidPosition(Item *node, int pos);
