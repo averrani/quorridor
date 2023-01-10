@@ -26,3 +26,16 @@ void movePlayer(Player player, int direction){
         break;
     }
 }
+
+
+void putWall(int position, int direction){
+    // switch (direction)
+    // {
+    // case /* constant-expression */:
+    //     /* code */
+    //     break;
+    
+    // default:
+    //     break;
+    // }
+}
