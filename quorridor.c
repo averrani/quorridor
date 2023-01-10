@@ -31,130 +31,20 @@ void showSolution( Item *goal )
   return;
 }
 
-
-void bfs( void ) //file
-{
-  Item *cur_node, *child_p, *temp;
-  int i;
+/*
+int minimax(int isMax){
+  int value;
+  Item *cur_node = popFirst(&openList_p);
+  if(cur_node->depth == 0)
+    return cur_node->g; //heuristic
   
-  while ( listCount(&openList_p) != 0 ) { /* While items are on the open list */
-   	//printf("%d \n", listCount(&openList_p));
-    /* Get the first item on the open list */
-    cur_node = popFirst(&openList_p);
-		//printList(openList_p);
-    // printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
-    
-    /* Add it to the "visited" list */
-    addLast(&closedList_p, cur_node);
-    /* Do we have a solution? */
-    if (evaluateBoard(cur_node) == 0.0 ) {
-      
-      showSolution(cur_node);
-      return;
+  if(isMax){
+    value = -100000;
+    value = max(value, minimax(getChildBoard(cur_node, i)))
 
-    } else {
-      /* Enumerate adjacent states */
-      for (int i = 0; i < MAX_BOARD; i++) {
-        
-        child_p = getChildBoard( cur_node, i );
-        if (child_p != NULL) { // it's a valid child!
-					
-                /* Ignore this child if already visited */
-                if (onList(&closedList_p, child_p->board) == NULL){
-                    addLast( &openList_p, child_p );
-                }
-                /* Add child node to openList */
-        }
-      }
-    }
   }
-  
-  return;
 }
-
-void dfs( void ) //pile
-{
-  Item *cur_node, *child_p, *temp;
-  int i;
-  
-  while ( listCount(&openList_p) != 0 ) { /* While items are on the open list */
-   	//printf("%d \n", listCount(&openList_p));
-    /* Get the first item on the open list */
-    cur_node = popFirst(&openList_p);
-		//printList(openList_p);
-    //printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
-    
-    /* Add it to the "visited" list */
-    addLast(&closedList_p, cur_node);
-    /* Do we have a solution? */
-    if (evaluateBoard(cur_node) == 0.0 ) {
-      
-      showSolution(cur_node);
-      return;
-
-    } else {
-      /* Enumerate adjacent states */
-      for (int i = 0; i < MAX_BOARD; i++) {
-        
-        child_p = getChildBoard( cur_node, i );
-        if (child_p != NULL) { // it's a valid child!
-					
-                /* Ignore this child if already visited */
-                if (onList(&closedList_p, child_p->board) == NULL){
-                    addFirst( &openList_p, child_p );
-                }
-                /* Add child node to openList */
-        }
-      }
-    }
-  }
-  
-  return;
-}
-
-void ucs( void ) 
-{
-  Item *cur_node, *child_p, *temp;
-  int i;  
-  
-
-  while ( listCount(&openList_p) != 0 ) { /* While items are on the open list */
-   	//printf("%d\n", listCount(&openList_p));
-    /* Get the first item on the open list */
-    cur_node = popBest(&openList_p);
-		//printList(openList_p);
-    // printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
-    
-    /* Add it to the "visited" list */
-    addLast(&closedList_p, cur_node);
-    /* Do we have a solution? */
-    if (evaluateBoard(cur_node) == 0.0 ) {
-      
-      showSolution(cur_node);
-      return;
-
-    } else {
-      /* Enumerate adjacent states */
-      for (int i = 0; i < MAX_BOARD; i++) {
-        //printf("%lf\n", cur_node->f);
-        child_p = getChildBoard( cur_node, i );
-        if (child_p != NULL) { // it's a valid child!
-        
-                temp = onList(&openList_p, child_p->board);
-                if(temp != NULL && (temp->f > child_p->f)){
-                  delList(&openList_p, temp);
-                  addLast( &openList_p, child_p );
-                }else if (onList(&closedList_p, child_p->board) == NULL && onList(&openList_p, child_p->board) == NULL ){
-                    addLast( &openList_p, child_p );
-                }
-                /* Add child node to openList */
-        }
-      }
-    }
-  }
-  
-  return;
-}
+*/
 
 int main()
 {
@@ -172,7 +62,7 @@ int main()
 
   addLast( &openList_p, initial_state );
   //printList(openList_p);
-  dfs();
+  //minimax();
   
 	printf("Finished!\n");
   
