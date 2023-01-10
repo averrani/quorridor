@@ -127,32 +127,29 @@ void initBoard(Item *node, char *board)
   if (board==NULL)
   {
 
-  node->player1.pos = 8;  // define pos of player1
+  node->player1.pos = 25;  // define pos of player1
   node->player1.turn = 1;  // first turn to player1
   node->player1.wall = 10; // number of wall
 
-  node->player2.pos = 314; // define pos of player2
+  node->player2.pos = 298; // define pos of player2
   node->player2.turn = 0;  // first turn to player1
   node->player2.wall = 10; // number of wall
 
 
-int ii, jj;
-  for (i=0; i<MAX_BOARD; i++) {
-    if(i%2 == 0){
-      node->board[i] = 0;
-    }
-    else
-      node->board[i] = -1;
-    ii = i / WH_BOARD;
-	  jj = i % WH_BOARD;
-
-    if((jj+1)%2 == 0){
-      node->board[i] = -1;
-    }
+  for (int i = 0; i < MAX_BOARD; i = i + 2)
+  {
+    node->board[i] = 0; // define where the player can move I START AT 0 AND I+2
+  }
+  for (int i = 1; i < MAX_BOARD; i = i + 2)
+  {
+    node->board[i] = -1; // define where the player can place wall I START AT 1 AND I+2
   }
   
-}
-
+  node->board[node->player1.pos] = 1;
+  node->board[node->player2.pos] = 2;
+  }
+  
+  
 }
 
 // Return 1 if knight is at the last
@@ -193,7 +190,6 @@ int isValidPosition(Item *node, int pos)
     }
     
   }
-  
   else
   {
      if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
