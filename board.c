@@ -9,11 +9,11 @@
 Item *initGame()
 {
 
-  int i,j;
+  int i, j;
   Item *node;
   node = nodeAlloc();
 
-  node->player1.pos = 8;  // define pos of player1
+  node->player1.pos = 8;   // define pos of player1
   node->player1.turn = 1;  // first turn to player1
   node->player1.wall = 10; // number of wall
 
@@ -24,16 +24,19 @@ Item *initGame()
   char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
 
   int ii, jj;
-  for (i=0; i<MAX_BOARD; i++) {
-    if(i%2 == 0){
+  for (i = 0; i < MAX_BOARD; i++)
+  {
+    if (i % 2 == 0)
+    {
       initial[i] = 0;
     }
     else
       initial[i] = -1;
     ii = i / WH_BOARD;
-	  jj = i % WH_BOARD;
+    jj = i % WH_BOARD;
 
-    if((jj+1)%2 == 0){
+    if ((jj + 1) % 2 == 0)
+    {
       initial[i] = -1;
     }
   }
@@ -48,7 +51,6 @@ Item *initGame()
   }
   */
 
-  
   initial[node->player1.pos] = 1;
   initial[node->player2.pos] = 2;
   initBoard(node, initial);
@@ -122,37 +124,35 @@ void initBoard(Item *node, char *board)
     }
   }
 
-
-
-  if (board==NULL)
+  if (board == NULL)
   {
 
-  node->player1.pos = 8;  // define pos of player1
-  node->player1.turn = 1;  // first turn to player1
-  node->player1.wall = 10; // number of wall
+    node->player1.pos = 8;   // define pos of player1
+    node->player1.turn = 1;  // first turn to player1
+    node->player1.wall = 10; // number of wall
 
-  node->player2.pos = 314; // define pos of player2
-  node->player2.turn = 0;  // first turn to player1
-  node->player2.wall = 10; // number of wall
+    node->player2.pos = 314; // define pos of player2
+    node->player2.turn = 0;  // first turn to player1
+    node->player2.wall = 10; // number of wall
 
+    int ii, jj;
+    for (i = 0; i < MAX_BOARD; i++)
+    {
+      if (i % 2 == 0)
+      {
+        node->board[i] = 0;
+      }
+      else
+        node->board[i] = -1;
+      ii = i / WH_BOARD;
+      jj = i % WH_BOARD;
 
-int ii, jj;
-  for (i=0; i<MAX_BOARD; i++) {
-    if(i%2 == 0){
-      node->board[i] = 0;
-    }
-    else
-      node->board[i] = -1;
-    ii = i / WH_BOARD;
-	  jj = i % WH_BOARD;
-
-    if((jj+1)%2 == 0){
-      node->board[i] = -1;
+      if ((jj + 1) % 2 == 0)
+      {
+        node->board[i] = -1;
+      }
     }
   }
-  
-}
-
 }
 
 // Return 1 if knight is at the last
@@ -166,9 +166,9 @@ int isValidPosition(Item *node, int pos)
   int jj = pos % WH_BOARD;
   // test a qui c'ets le tour
   // testé si la position a testé est derriere le player1 ou a droite du player1 avant de testé si y'a des murs
-    // test si y'a pas de mur en premier puis test si y'a pas le joueur adverse sur la case
-    //-2 where there is a wall
-    // 1 where there is a player
+  // test si y'a pas de mur en premier puis test si y'a pas le joueur adverse sur la case
+  //-2 where there is a wall
+  // 1 where there is a player
   if (node->player1.turn == 1)
   {
     if (abs(node->player1.pos - pos) == 2 || abs(node->player1.pos - pos) == 34)
@@ -191,12 +191,11 @@ int isValidPosition(Item *node, int pos)
         return 1;
       }
     }
-    
   }
-  
+
   else
   {
-     if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
+    if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
     {
 
       if (node->player2.pos - pos == 2 && node->player2.pos - 1 != -2) // test 1st legal move
@@ -218,6 +217,28 @@ int isValidPosition(Item *node, int pos)
     }
   }
   return 0;
+}
+
+int isValidPositionWall(Item *node, int pos, int dir)
+{
+
+  if (node->board[pos] == -1)
+  {
+    if (dir == 0) // cas horizontal.
+    {
+      if (node->board[pos + 1] == -1 && node->board[pos - 1] == -1)
+      {
+        return 1;
+      }
+    }
+    else
+    {
+      if (node->board[pos + 17] == -1 && node->board[pos - 17] == -1)
+      {
+        return 1;
+      }
+    }
+  }
 }
 
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
