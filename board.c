@@ -152,6 +152,7 @@ int ii, jj;
   }
   
 }
+
 }
 
 // Return 1 if knight is at the last
@@ -192,6 +193,7 @@ int isValidPosition(Item *node, int pos)
     }
     
   }
+  
   else
   {
      if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
