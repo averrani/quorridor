@@ -8,6 +8,8 @@
 #include "item.h"
 #include "board.h"
 
+//player == 0 pour joueur
+//player == 1 pour ia
 void movePlayer(Item *node, int player, int direction){
 
     if(player == 0){//correspond au joueur
@@ -15,13 +17,13 @@ void movePlayer(Item *node, int player, int direction){
         switch (direction)
         {
         case 0: //haut
-            node->player.pos -= WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+            node->player.pos -= 2*WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
             break;
         case 1: //droite
             node->player.pos += 2; //on ajoute 2 a la position dans la grille pour passer sur la case a droite
             break;
         case 2: // bas
-            node->player.pos += WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+            node->player.pos += 2*WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
             break;
         case 3: //gauche
             node->player.pos -= 2; //on retire 2 a la position dans la grille pour passer sur la case a gauche
@@ -39,13 +41,13 @@ void movePlayer(Item *node, int player, int direction){
         switch (direction)
         {
         case 0: //haut
-            node->ia.pos -= WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+            node->ia.pos -= 2*WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
             break;
         case 1: //droite
             node->ia.pos += 2; //on ajoute 2 a la position dans la grille pour passer sur la case a droite
             break;
         case 2: // bas
-            node->ia.pos += WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+            node->ia.pos += 2*WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
             break;
         case 3: //gauche
             node->ia.pos -= 2; //on retire 2 a la position dans la grille pour passer sur la case a gauche
@@ -61,7 +63,8 @@ void movePlayer(Item *node, int player, int direction){
     
 }
 
-
+//direction == 0 pour horizontal
+//direction == 1 pour vertical
 void putWall(Item *node, int position, int direction){
     
     assert(node->board[position] == -1);

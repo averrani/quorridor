@@ -127,11 +127,11 @@ void initBoard(Item *node, char *board)
   if (board == NULL)
   {
 
-  node->player.pos = 314;  // define pos of player
+  node->player.pos = WH_BOARD*(WH_BOARD+1) + WH_BOARD/2;  // define pos of player
   node->player.turn = 1;  // first turn to player
   node->player.wall = 10; // number of wall
 
-  node->ia.pos = 8; // define pos of ia
+  node->ia.pos = WH_BOARD/2; // define pos of ia
   node->ia.turn = 0;  // first turn to player
   node->ia.wall = 10; // number of wall
 
@@ -155,9 +155,7 @@ int ii, jj;
 
 }
 
-// Return 1 if knight is at the last
-//
-
+/*
 // Test if position pos is valid with respect to node's state
 // nQueens -> not same row ; not same column ; not same diagonal
 int isValidPosition(Item *node, int pos)
@@ -218,6 +216,62 @@ int isValidPosition(Item *node, int pos)
   }
   return 0;
 }
+*/
+
+//player = 0 pour le joueur
+//player = 1 pour l'ia
+int isValidPosition(Item *node, int pos, int player){
+  
+  //test si pos est la pos d'un mur
+  if(node->board[pos] == -1 || node->board[pos] == -2)
+    return 0;
+
+  if(player == 0){ //test pour le joueur    
+    //tests de deplacements autorisés
+    if(pos == node->player.pos + 2 || pos == node->player.pos - 2 || pos == node->player.pos + WH_BOARD || pos == node->player.pos - WH_BOARD){
+
+      if(pos == node->ia.pos) //test pr savoir si la case contient le joueur adverse
+      return 2;
+      if(pos == node->player.pos + 2 && node->board[pos - 1] == -1 ){ // test pr savoir si y'a un mur a droite
+        return 1;
+      }
+      if(pos == node->player.pos - 2 && node->board[pos + 1] == -1 ){ // test pr savoir si y'a un mur a gauche
+        return 1;
+      }
+      if(pos == node->player.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en bas
+        return 1;
+      }
+      if(pos == node->player.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en haut
+        return 1;
+      }
+    }
+
+  }else if(player == 1){ //test pour l'ia
+    
+    //tests de deplacements autorisés
+    if(pos == node->ia.pos + 2 || pos == node->ia.pos - 2 || pos == node->ia.pos + (2*WH_BOARD) || pos == node->ia.pos - (2*WH_BOARD)){
+
+      if(pos == node->player.pos) //test pr savoir si la case contient le joueur adverse
+        return 2;
+      if(pos == node->ia.pos + 2 && node->board[pos - 1] == -1 ){ // test pr savoir si y'a un mur a droite
+        return 1;
+      }
+      if(pos == node->ia.pos - 2 && node->board[pos + 1] == -1 ){ // test pr savoir si y'a un mur a gauche
+        return 1;
+      }
+      if(pos == node->ia.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en bas
+        return 1;
+      }
+      if(pos == node->ia.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en haut
+        return 1;
+      }
+    }
+    
+    return 0;
+  }
+  
+
+}
 
 int isValidPositionWall(Item *node, int pos, int dir)
 {
@@ -246,7 +300,7 @@ Item *getChildBoard(Item *node, int pos)
 {
   Item *child_p = NULL;
 
-  if (isValidPosition(node, pos))
+  if (isValidPosition(node, pos, 0))
   {
     /* allocate and init child node */
     child_p = nodeAlloc();

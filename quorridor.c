@@ -60,9 +60,11 @@ int main()
 
   printf("\nSearching ...\n");
   
-  //movePlayer(initial_state, 0, 1);
-  putWall(initial_state, 1, 0);
+  movePlayer(initial_state, 0, 0);
+  putWall(initial_state, 14, 0);
+  putWall(initial_state, 10, 0);
   printBoard( initial_state );
+  printf("%d \n", isValidPosition(initial_state, 2, 0));
 
   addLast( &openList_p, initial_state );
   //printList(openList_p);
