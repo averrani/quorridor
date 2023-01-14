@@ -1,15 +1,13 @@
-#include "player.h"
-
 #ifndef ITEM_H
 #define ITEM_H
 
+#include "player.h"
+
 struct Item_s;
 
-
-
 typedef struct Item_s {
-  Player player1;
-  Player player2;
+  Player player;
+  Player ia;
   int size; 
   char *board; // board is an array of small int
   int blank;

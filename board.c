@@ -13,13 +13,13 @@ Item *initGame()
   Item *node;
   node = nodeAlloc();
 
-  node->player1.pos = 8;   // define pos of player1
-  node->player1.turn = 1;  // first turn to player1
-  node->player1.wall = 10; // number of wall
+  node->player.pos = WH_BOARD*(WH_BOARD+1) + WH_BOARD/2;   // define pos of player
+  node->player.turn = 1;  // first turn to player
+  node->player.wall = 10; // number of wall
 
-  node->player2.pos = 314; // define pos of player2
-  node->player2.turn = 0;  // first turn to player1
-  node->player2.wall = 10; // number of wall
+  node->ia.pos = WH_BOARD/2; // define pos of ia
+  node->ia.turn = 0;  // first turn to player
+  node->ia.wall = 10; // number of wall
 
   char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
 
@@ -51,8 +51,8 @@ Item *initGame()
   }
   */
 
-  initial[node->player1.pos] = 1;
-  initial[node->player2.pos] = 2;
+  initial[node->player.pos] = 1;
+  initial[node->ia.pos] = 2;
   initBoard(node, initial);
 
   node->depth = 0;
@@ -95,14 +95,14 @@ void printBoard(Item *node)
 
 double evaluateBoard(Item *node)
 {
-  if (0 < node->player2.pos < 17)
+  if (0 < node->player.pos < WH_BOARD)
   {
-    printf("PLayer 2 win");
+    printf("Player win");
     return 1;
   }
-  if (305 < node->player2.pos < 322)
+  if (305 < node->ia.pos < 322)
   {
-    printf("PLayer 1 win");
+    printf("ia win");
     return 1;
   }
 }
@@ -127,13 +127,13 @@ void initBoard(Item *node, char *board)
   if (board == NULL)
   {
 
-  node->player1.pos = 8;  // define pos of player1
-  node->player1.turn = 1;  // first turn to player1
-  node->player1.wall = 10; // number of wall
+  node->player.pos = 314;  // define pos of player
+  node->player.turn = 1;  // first turn to player
+  node->player.wall = 10; // number of wall
 
-  node->player2.pos = 314; // define pos of player2
-  node->player2.turn = 0;  // first turn to player1
-  node->player2.wall = 10; // number of wall
+  node->ia.pos = 8; // define pos of ia
+  node->ia.turn = 0;  // first turn to player
+  node->ia.wall = 10; // number of wall
 
 
 int ii, jj;
@@ -165,28 +165,28 @@ int isValidPosition(Item *node, int pos)
   int ii = pos / WH_BOARD;
   int jj = pos % WH_BOARD;
   // test a qui c'ets le tour
-  // testé si la position a testé est derriere le player1 ou a droite du player1 avant de testé si y'a des murs
+  // testé si la position a testé est derriere le player ou a droite du player avant de testé si y'a des murs
   // test si y'a pas de mur en premier puis test si y'a pas le joueur adverse sur la case
   //-2 where there is a wall
   // 1 where there is a player
-  if (node->player1.turn == 1)
+  if (node->player.turn == 1)
   {
-    if (abs(node->player1.pos - pos) == 2 || abs(node->player1.pos - pos) == 34)
+    if (abs(node->player.pos - pos) == 2 || abs(node->player.pos - pos) == 34)
     {
 
-      if (node->player1.pos - pos == 2 && node->player1.pos + 1 != -2) // test 1st legal move
+      if (node->player.pos - pos == 2 && node->player.pos + 1 != -2) // test 1st legal move
       {
         return 1;
       }
-      if (node->player1.pos - pos == -2 && node->player1.pos - 1 != -2) // test 2nd legal move
+      if (node->player.pos - pos == -2 && node->player.pos - 1 != -2) // test 2nd legal move
       {
         return 1;
       }
-      if (node->player1.pos - pos == 34 && node->player1.pos + 17 != -2) // test 3rd legal move
+      if (node->player.pos - pos == 34 && node->player.pos + WH_BOARD != -2) // test 3rd legal move
       {
         return 1;
       }
-      if (node->player1.pos - pos == -34 && node->player1.pos - 17 != -2) // test 4th legal move
+      if (node->player.pos - pos == -34 && node->player.pos - WH_BOARD != -2) // test 4th legal move
       {
         return 1;
       }
@@ -195,22 +195,22 @@ int isValidPosition(Item *node, int pos)
   
   else
   {
-    if (abs(node->player2.pos - pos) == 2 || abs(node->player2.pos - pos) == 34)
+    if (abs(node->ia.pos - pos) == 2 || abs(node->ia.pos - pos) == 34)
     {
 
-      if (node->player2.pos - pos == 2 && node->player2.pos - 1 != -2) // test 1st legal move
+      if (node->ia.pos - pos == 2 && node->ia.pos - 1 != -2) // test 1st legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == -2 && node->player2.pos + 1 != -2) // test 2nd legal move
+      if (node->ia.pos - pos == -2 && node->ia.pos + 1 != -2) // test 2nd legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == 34 && node->player2.pos - 17 != -2) // test 3rd legal move
+      if (node->ia.pos - pos == 34 && node->ia.pos - WH_BOARD != -2) // test 3rd legal move
       {
         return 1;
       }
-      if (node->player2.pos - pos == -34 && node->player2.pos + 17 != -2) // test 4th legal move
+      if (node->ia.pos - pos == -34 && node->ia.pos + WH_BOARD != -2) // test 4th legal move
       {
         return 1;
       }
@@ -233,7 +233,7 @@ int isValidPositionWall(Item *node, int pos, int dir)
     }
     else
     {
-      if (node->board[pos + 17] == -1 && node->board[pos - 17] == -1)
+      if (node->board[pos + WH_BOARD] == -1 && node->board[pos - WH_BOARD] == -1)
       {
         return 1;
       }

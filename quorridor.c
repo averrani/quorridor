@@ -6,7 +6,7 @@
 
 #include "list.h"
 #include "board.h"
-
+#include "player.h" // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ENLEVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 list_t openList_p;
 list_t closedList_p;
@@ -56,12 +56,17 @@ int main()
 	
   printf("\nInitial:");
   Item *initial_state = initGame();
-  printBoard( initial_state );
+  //printBoard( initial_state );
 
   printf("\nSearching ...\n");
+  
+  //movePlayer(initial_state, 0, 1);
+  putWall(initial_state, 1, 0);
+  printBoard( initial_state );
 
   addLast( &openList_p, initial_state );
   //printList(openList_p);
+
   //minimax();
   
 	printf("Finished!\n");
