@@ -40,17 +40,6 @@ Item *initGame()
       initial[i] = -1;
     }
   }
-
-  /*for (int i = 0; i < MAX_BOARD; i = i + 2)
-  {
-    initial[i] = 0; // define where the player can move I START AT 0 AND I+2
-  }
-  for (int i = 1; i < MAX_BOARD; i = i + 2)
-  {
-    initial[i] = -1; // define where the player can place wall I START AT 1 AND I+2
-  }
-  */
-
   initial[node->player.pos] = 1;
   initial[node->ia.pos] = 2;
   initBoard(node, initial);
@@ -152,71 +141,8 @@ int ii, jj;
   }
   
 }
-
 }
 
-/*
-// Test if position pos is valid with respect to node's state
-// nQueens -> not same row ; not same column ; not same diagonal
-int isValidPosition(Item *node, int pos)
-{
-  int ii = pos / WH_BOARD;
-  int jj = pos % WH_BOARD;
-  // test a qui c'ets le tour
-  // testé si la position a testé est derriere le player ou a droite du player avant de testé si y'a des murs
-  // test si y'a pas de mur en premier puis test si y'a pas le joueur adverse sur la case
-  //-2 where there is a wall
-  // 1 where there is a player
-  if (node->player.turn == 1)
-  {
-    if (abs(node->player.pos - pos) == 2 || abs(node->player.pos - pos) == 34)
-    {
-
-      if (node->player.pos - pos == 2 && node->player.pos + 1 != -2) // test 1st legal move
-      {
-        return 1;
-      }
-      if (node->player.pos - pos == -2 && node->player.pos - 1 != -2) // test 2nd legal move
-      {
-        return 1;
-      }
-      if (node->player.pos - pos == 34 && node->player.pos + WH_BOARD != -2) // test 3rd legal move
-      {
-        return 1;
-      }
-      if (node->player.pos - pos == -34 && node->player.pos - WH_BOARD != -2) // test 4th legal move
-      {
-        return 1;
-      }
-    }
-  }
-  
-  else
-  {
-    if (abs(node->ia.pos - pos) == 2 || abs(node->ia.pos - pos) == 34)
-    {
-
-      if (node->ia.pos - pos == 2 && node->ia.pos - 1 != -2) // test 1st legal move
-      {
-        return 1;
-      }
-      if (node->ia.pos - pos == -2 && node->ia.pos + 1 != -2) // test 2nd legal move
-      {
-        return 1;
-      }
-      if (node->ia.pos - pos == 34 && node->ia.pos - WH_BOARD != -2) // test 3rd legal move
-      {
-        return 1;
-      }
-      if (node->ia.pos - pos == -34 && node->ia.pos + WH_BOARD != -2) // test 4th legal move
-      {
-        return 1;
-      }
-    }
-  }
-  return 0;
-}
-*/
 
 //player = 0 pour le joueur
 //player = 1 pour l'ia
