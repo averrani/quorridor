@@ -13,7 +13,7 @@ Item *initGame()
   Item *node;
   node = nodeAlloc();
 
-  node->player.pos = WH_BOARD*(WH_BOARD+1) + WH_BOARD/2;   // define pos of player
+  node->player.pos = WH_BOARD*(WH_BOARD-1) + WH_BOARD/2;   // define pos of player
   node->player.turn = 1;  // first turn to player
   node->player.wall = 10; // number of wall
 
@@ -199,27 +199,36 @@ int isValidPosition(Item *node, int pos, int player){
 
 //dir = 0 horizontal
 //dir = 1 vertical
-int isValidPositionWall(Item *node, int pos, int dir)
-{
-
-  if (node->board[pos] == -1)
-  {
-    if (dir == 0) // cas horizontal.
-    {
-      if (node->board[pos + 1] == -1 && node->board[pos - 1] == -1)
-      {
-        return 1;
+int isValidPositionWall(Item *node, int pos, int dir){
+  int i,j;
+  if(dir == 0){//horizontal
+    if(node->board[pos-1] == -1 && node->board[pos] == -1 && node->board[pos+1] == -1 && node->board[pos+2] == -1){
+      for(j=1; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
+          for(i=0; i<WH_BOARD/4; i++){ 
+            if(pos == (4 *i +1)+(j*WH_BOARD) || pos == (4 *i+2)+(j*WH_BOARD)){ //voir screen 
+                return 1;
+            }
+          }
       }
+      return 0;
     }
-    else
-    {
-      if (node->board[pos + WH_BOARD] == -1 && node->board[pos - WH_BOARD] == -1)
-      {
-        return 1;
+    return 0;// ne pas enlever important
+  }
+  if(dir == 1){ //vertical
+    if(node->board[pos-WH_BOARD] == -1 && node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 && node->board[pos+(2*WH_BOARD)] == -1){
+      for(i=1; i<(WH_BOARD/2)+1 ; i++){ //parcours colonne
+          for(j=1; j<WH_BOARD; j=j+4){ // parcours lignes
+            if(pos == (2 *i -1)+(j*WH_BOARD) || pos == (2 *i-1)+((j+1)*WH_BOARD)){ //voir screen 
+                return 1;
+            }
+          }
       }
+      return 0;
     }
+    return 0;// ne pas enlever important
   }
 }
+
 
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard(Item *node, int pos)

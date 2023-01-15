@@ -119,11 +119,19 @@ int main()
 
   printf("\nSearching ...\n");
 
-  movePlayer(initial_state, 0, 0);
-  putWall(initial_state,0, 14, 0);
-  printBoard(initial_state);
-  printf("%d \n", isValidPosition(initial_state, 4, 0));
+  //movePlayer(initial_state, 0, 0);
   
+  
+  int i;
+  for(i =0; i<MAX_BOARD; i++){
+    //printf("%d %d \n",i, isValidPositionWall(initial_state, i, 1));
+  }
+  for(i =0; i<MAX_BOARD; i++){
+    if(isValidPositionWall(initial_state, i, 1))
+      putWall(initial_state,0,i,1);
+  }
+  printBoard(initial_state);
+
   //gameActionLoop(initial_state);
 
   addLast(&openList_p, initial_state);

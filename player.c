@@ -79,14 +79,14 @@ void putWall(Item *node, int player, int position, int direction){
     switch (direction)
     {
     case 0: //horizontal
-        assert(node->board[position-1] == -1 && node->board[position+1] == -1 && node->board[position+2] == -1); // verifie que c'est un endroit pour murs
+        assert(node->board[position-1] == -1 && node->board[position] == -1 && node->board[position+1] == -1 && node->board[position+2] == -1); // verifie que c'est un endroit pour murs
         node->board[position-1] = -2;
         node->board[position] = -2;
         node->board[position+1] = -2;
         node->board[position+2] = -2;
         break;
     case 1: //vertical
-        assert(node->board[position-WH_BOARD] == -1 && node->board[position+WH_BOARD] == -1 && node->board[position+(2*WH_BOARD)] == -1); // verifie que c'est un endroit pour murs
+        assert(node->board[position-WH_BOARD] == -1 && node->board[position] == -1 && node->board[position+WH_BOARD] == -1 && node->board[position+(2*WH_BOARD)] == -1); // verifie que c'est un endroit pour murs
         node->board[position-WH_BOARD] = -2;
         node->board[position] = -2;
         node->board[position+WH_BOARD] = -2;
@@ -94,6 +94,7 @@ void putWall(Item *node, int player, int position, int direction){
         break;
 
     default:
+        printf("Indiquez une valeur de direction comprise entre 0 et 1");
         break;
     }
 
