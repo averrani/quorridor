@@ -88,4 +88,6 @@ void putWall(Item *node, int position, int direction){
     default:
         break;
     }
+
+    node->player.wall--; //on décrémente le nombre de mur restant à placer chez le joueur
 }
