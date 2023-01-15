@@ -100,7 +100,7 @@ void gameActionLoop(Item *node)
         putWall(node, positionWall, directionWall);
 
         printBoard(node);
-        switchPlayerTurn(player); // n change le trait, c'est au tour du joueur 2 de jouer
+        switchPlayerTurn(player); // on change le trait, c'est au tour du joueur 2 de jouer
 
       }
   }
