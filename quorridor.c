@@ -108,7 +108,7 @@ void gameActionLoop(Item *node)
 
 int main()
 {
-  printf("\n"); // segmentation error without this line ???
+  
   /* init lists */
   initList(&openList_p);
   initList(&closedList_p);
@@ -119,13 +119,16 @@ int main()
 
   printf("\nSearching ...\n");
 
-  // movePlayer(initial_state, 0, 0);
-  // putWall(initial_state, 14, 0);
-  // putWall(initial_state, 10, 0);
-  // printBoard(initial_state);
-  // printf("%d \n", isValidPosition(initial_state, 2, 0));
-
-  gameActionLoop(initial_state);
+  movePlayer(initial_state, 0, 0);
+  movePlayer(initial_state, 0, 0);
+  movePlayer(initial_state, 0, 0);
+  movePlayer(initial_state, 0, 0);
+  putWall(initial_state, 14, 0);
+  putWall(initial_state, 10, 0);
+  printBoard(initial_state);
+  printf("%d \n", isValidPosition(initial_state, 4, 0));
+  
+  //gameActionLoop(initial_state);
 
   addLast(&openList_p, initial_state);
   // printList(openList_p);

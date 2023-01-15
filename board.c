@@ -228,10 +228,10 @@ int isValidPosition(Item *node, int pos, int player){
 
   if(player == 0){ //test pour le joueur    
     //tests de deplacements autorisés
-    if(pos == node->player.pos + 2 || pos == node->player.pos - 2 || pos == node->player.pos + WH_BOARD || pos == node->player.pos - WH_BOARD){
+    if(pos == node->player.pos + 2 || pos == node->player.pos - 2 || pos == node->player.pos + (2*WH_BOARD) || pos == node->player.pos - (2*WH_BOARD)){
 
       if(pos == node->ia.pos) //test pr savoir si la case contient le joueur adverse
-      return 2;
+        return 2;
       if(pos == node->player.pos + 2 && node->board[pos - 1] == -1 ){ // test pr savoir si y'a un mur a droite
         return 1;
       }
@@ -245,6 +245,7 @@ int isValidPosition(Item *node, int pos, int player){
         return 1;
       }
     }
+      return 0;
 
   }else if(player == 1){ //test pour l'ia
     
