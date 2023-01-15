@@ -120,11 +120,7 @@ int main()
   printf("\nSearching ...\n");
 
   movePlayer(initial_state, 0, 0);
-  movePlayer(initial_state, 0, 0);
-  movePlayer(initial_state, 0, 0);
-  movePlayer(initial_state, 0, 0);
-  putWall(initial_state, 14, 0);
-  putWall(initial_state, 10, 0);
+  putWall(initial_state,0, 14, 0);
   printBoard(initial_state);
   printf("%d \n", isValidPosition(initial_state, 4, 0));
   

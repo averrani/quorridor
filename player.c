@@ -65,9 +65,17 @@ void movePlayer(Item *node, int player, int direction){
 
 //direction == 0 pour horizontal
 //direction == 1 pour vertical
-void putWall(Item *node, int position, int direction){
+//player == 0 pour joueur
+//player == 1 pour ia
+void putWall(Item *node, int player, int position, int direction){
     
+    //verifications primaires
     assert(node->board[position] == -1);
+    if(player == 0)
+        assert(node->player.wall >= 0); 
+    if(player == 1)
+        assert(node->ia.wall >= 0);  
+
     switch (direction)
     {
     case 0: //horizontal
@@ -89,5 +97,9 @@ void putWall(Item *node, int position, int direction){
         break;
     }
 
-    node->player.wall--; //on décrémente le nombre de mur restant à placer chez le joueur
+    //on décrémente le nombre de mur restant à placer chez le joueur
+    if(player == 0)
+        node->player.wall--; 
+    if(player == 1)
+        node->ia.wall--; 
 }

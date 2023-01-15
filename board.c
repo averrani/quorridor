@@ -147,7 +147,6 @@ int ii, jj;
 //player = 0 pour le joueur
 //player = 1 pour l'ia
 int isValidPosition(Item *node, int pos, int player){
-  
   //test si pos est la pos d'un mur
   if(node->board[pos] == -1 || node->board[pos] == -2)
     return 0;
@@ -196,10 +195,10 @@ int isValidPosition(Item *node, int pos, int player){
     
     return 0;
   }
-  
-
 }
 
+//dir = 0 horizontal
+//dir = 1 vertical
 int isValidPositionWall(Item *node, int pos, int dir)
 {
 
