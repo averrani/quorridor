@@ -13,23 +13,53 @@
 void movePlayer(Item *node, int player, int direction){
 
     if(player == 0){//correspond au joueur
+    
         int tmp = node->player.pos; //garde l'ancienne position du joueur
+        //on ajoute l'exception si la position ou le joueur veut aller est celle de l'ia
         switch (direction)
         {
         case 0: //haut
-            node->player.pos -= 2*WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+            if(node->player.pos/WH_BOARD != 0){
+                if(node->player.pos - 2*WH_BOARD == node->ia.pos){
+                    if((node->player.pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD){
+                        node->player.pos -= 4*WH_BOARD;
+                    }else printf("deplacement impossible exception sortie board \n");
+                }else
+                node->player.pos -= 2*WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+            }else printf("deplacement impossible exception sortie board \n");
             break;
         case 1: //droite
-            node->player.pos += 2; //on ajoute 2 a la position dans la grille pour passer sur la case a droite
+            if(node->player.pos%WH_BOARD != WH_BOARD-1){
+                if(node->player.pos + 2 == node->ia.pos){
+                    if((node->player.pos + 4)/WH_BOARD == node->player.pos/WH_BOARD){
+                        node->player.pos += 4;
+                    }else printf("deplacement impossible exception sortie board \n");
+                }else
+                node->player.pos += 2; //on ajoute 2 a la position dans la grille pour passer sur la case a droite
+            }else printf("deplacement impossible exception sortie board \n");
             break;
         case 2: // bas
-            node->player.pos += 2*WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+            if(node->player.pos/WH_BOARD != WH_BOARD-1){
+                if(node->player.pos + 2*WH_BOARD == node->ia.pos){
+                    if((node->player.pos + 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD){
+                        node->player.pos += 4*WH_BOARD;
+                    }else printf("deplacement impossible exception sortie board \n");
+                }else
+                node->player.pos += 2*WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+            }else printf("deplacement impossible exception sortie board \n");
             break;
         case 3: //gauche
-            node->player.pos -= 2; //on retire 2 a la position dans la grille pour passer sur la case a gauche
+            if(node->player.pos%WH_BOARD != 0){
+                if(node->player.pos - 2 == node->ia.pos){
+                    if((node->player.pos - 4)/WH_BOARD == node->player.pos/WH_BOARD){
+                        node->player.pos -= 4;
+                    }else printf("deplacement impossible exception sortie board \n");
+                }else
+                node->player.pos -= 2; //on retire 2 a la position dans la grille pour passer sur la case a gauche
+            }else printf("deplacement impossible exception sortie board \n");
             break;
         default:
-            printf("Indiquez une valeur de déplacement comprise entre 0 et 3");
+            printf("Indiquez une valeur de déplacement comprise entre 0 et 3 \n");
             break;
         }
         // change la position du joueur sur le board
@@ -97,8 +127,7 @@ void putWall(Item *node, int player, int position, int direction){
     }
 
     //on décrémente le nombre de mur restant à placer chez le joueur
+    //pour l'ia on le fait dans getchildboard
     if(player == 0)
         node->player.wall--; 
-    if(player == 1)
-        node->ia.wall--; 
 }
