@@ -46,17 +46,58 @@ int minimax(int isMax){
 }
 */
 
-//fonction permettant de changer le trait de la partie
-void switchPlayerTurn(int * player)
+void switchPlayerTurn(int * player)//fonction permettant de changer le trait de la partie
 {
   if(*player == 0) *player = 1;
   else if(*player == 0) *player = 0;
 }
 
-void getTurnPlayer(int * player)
+void getTurnPlayer(int * player)//fonction indiquant qui possède le trait
 {
   if(*player == 0) printf("C'est à l'humain de jouer \n");
   else printf("C'est à l'ia de jouer\n");
+}
+
+int getAction() //fonction gérant le choix de l'utilisateur sur l'action à effectuer
+{
+  int action;
+
+  printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
+  scanf("%d\n", &action);
+  printf("action : %d\n", action);
+
+  return action;
+}
+
+int getDirectionMove()//fonction gérant le choix de l'utilisateur sur la direction de déplacement
+{
+  int directionMove;
+  printf("Donnez une direction de déplacement : 0-1-2-3 => haut-droite-bas-gauche\n");
+  scanf("%d\n", &directionMove);
+  printf("directionMove : %d\n", directionMove);
+
+  return directionMove;
+}
+
+int getPositionWall() //fonction gérant le choix de l'utilisateur sur la position du mur a poser
+{
+  int positionWall;
+
+  printf("Donnez une position pour le mur\n");
+  scanf("%d\n", &positionWall);
+  printf("positionWall : %d\n", positionWall);
+
+  return positionWall;
+}
+
+int getDirectionWall()
+{
+  int directionWall;
+  printf("Donnez une direction/orientation pour le mur : 0 => horizontal | 1 => vertical\n");
+  scanf("%d\n", &directionWall);
+  printf("directionWall : %d\n", directionWall);
+
+  return directionWall;
 }
 
 void gameActionLoop(Item *node)
@@ -72,16 +113,12 @@ void gameActionLoop(Item *node)
   {
       getTurnPlayer(&player);
 
-      printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
-      scanf("%d\n", &action);
-      printf("action : %d\n", action);
+      action = getAction();
 
       if(action == 0)
       {
         // si action == 0, on effectue le déplacement du pion
-        printf("Donnez une direction de déplacement : 0-1-2-3 => haut-droite-bas-gauche\n");
-        scanf("%d\n", &directionMove);
-        printf("directionMove : %d\n", directionMove);
+        directionMove = getDirectionMove();
 
 
         // on vérifie que le directionMove est une valeur exploitable
@@ -96,16 +133,10 @@ void gameActionLoop(Item *node)
 
       else if(action == 1)// si action == 1, on pose un mur
       {
-        printf("Donnez une position pour le mur\n");
-        scanf("%d\n", &positionWall);
-        printf("positionWall : %d\n", positionWall);
+        positionWall = getPositionWall();
         
-
-        printf("Donnez une direction/orientation pour le mur : 0 => horizontal | 1 => vertical\n");
-        scanf("%d\n", &directionWall);
-        printf("directionWall : %d\n", directionWall);
-
-
+        directionWall = getDirectionWall();
+        
         putWall(node, positionWall, directionWall);
 
         printBoard(node);
@@ -124,11 +155,12 @@ int main()
 
   printf("\nInitial:");
   Item *initial_state = initGame();
-  // printBoard( initial_state );
+  printBoard( initial_state );
 
   printf("\nSearching ...\n");
 
-  // //movePlayer(initial_state, 0, 0);
+  // movePlayer(initial_state, 1, 2);
+  // printBoard( initial_state );
   
   
   // int i;
