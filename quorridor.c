@@ -47,10 +47,16 @@ int minimax(int isMax){
 */
 
 //fonction permettant de changer le trait de la partie
-void switchPlayerTurn(int player)
+void switchPlayerTurn(int * player)
 {
-  if(player == 0)player = 1;
-  if(player == 1)player = 0;
+  if(*player == 0) *player = 1;
+  else if(*player == 0) *player = 0;
+}
+
+void getTurnPlayer(int * player)
+{
+  if(*player == 0) printf("C'est à l'humain de jouer \n");
+  else printf("C'est à l'ia de jouer\n");
 }
 
 void gameActionLoop(Item *node)
@@ -64,6 +70,8 @@ void gameActionLoop(Item *node)
   int directionWall, positionWall; // indique la direction et la position du mur a placer
   while (1)                // tant que l'utilisateur n'a pas choisit de quitter le jeu (exit == 1)
   {
+      getTurnPlayer(&player);
+
       printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
       scanf("%d\n", &action);
       printf("action : %d\n", action);
@@ -83,8 +91,9 @@ void gameActionLoop(Item *node)
         movePlayer(node, player, directionMove);
 
         printBoard(node);//on affiche la grille après les modifications
-        switchPlayerTurn(player); //on change le trait, c'est au tour du joueur 2 de jouer
+        switchPlayerTurn(&player); //on change le trait, c'est au tour du joueur 2 de jouer
       }
+
       else if(action == 1)// si action == 1, on pose un mur
       {
         printf("Donnez une position pour le mur\n");
@@ -100,7 +109,7 @@ void gameActionLoop(Item *node)
         putWall(node, positionWall, directionWall);
 
         printBoard(node);
-        switchPlayerTurn(player); // on change le trait, c'est au tour du joueur 2 de jouer
+        switchPlayerTurn(&player); // on change le trait, c'est au tour du joueur 2 de jouer
 
       }
   }
@@ -119,31 +128,31 @@ int main()
 
   printf("\nSearching ...\n");
 
-  //movePlayer(initial_state, 0, 0);
+  // //movePlayer(initial_state, 0, 0);
   
   
-  int i;
-  for(i =0; i<MAX_BOARD; i++){
-    //printf("%d %d \n",i, isValidPositionWall(initial_state, i, 1));
-  }
-  for(i =0; i<MAX_BOARD; i++){
-    if(isValidPositionWall(initial_state, i, 1))
-      putWall(initial_state,0,i,1);
-  }
-  printBoard(initial_state);
+  // int i;
+  // for(i =0; i<MAX_BOARD; i++){
+  //   //printf("%d %d \n",i, isValidPositionWall(initial_state, i, 1));
+  // }
+  // for(i =0; i<MAX_BOARD; i++){
+  //   if(isValidPositionWall(initial_state, i, 1))
+  //     putWall(initial_state,0,i,1);
+  // }
+  // printBoard(initial_state);
 
-  //gameActionLoop(initial_state);
+  gameActionLoop(initial_state);
 
-  addLast(&openList_p, initial_state);
-  // printList(openList_p);
+  // addLast(&openList_p, initial_state);
+  // // printList(openList_p);
 
-  // minimax();
+  // // minimax();
 
-  printf("Finished!\n");
+  // printf("Finished!\n");
 
-  /* clean lists */
-  cleanupList(&openList_p);
-  cleanupList(&closedList_p);
+  // /* clean lists */
+  // cleanupList(&openList_p);
+  // cleanupList(&closedList_p);
 
   return 0;
 }
