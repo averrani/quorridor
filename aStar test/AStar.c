@@ -14,10 +14,10 @@ char map[map_size_rows][map_size_cols] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 1, 1, 1, 0, 1},
-    {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
-    {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
-    {1, 0, 0, 1, 1, 1, 1, 1, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
@@ -32,6 +32,8 @@ struct stop
     double f, g, h;//cout total, distance de l'arrivé, distance du départ 
     int from;
 };
+
+
 
 int ind[map_size_rows][map_size_cols] = {
     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -53,6 +55,17 @@ struct route
     int y; /* intex of stop in array of all stops od dst of this route */
     double d;
 };
+
+void freestop(struct stop s){
+    s.col=0;
+    s.row=0;
+    s.n=NULL;
+    s.n_len=NULL;
+    s.f=DBL_MAX;
+    s.g=DBL_MAX;
+    s.h=DBL_MAX;
+    s.from=0;    
+}
 
 int main()
 {
@@ -84,11 +97,23 @@ int main()
                 int t = s_len - 1;
                 stops[t].col = j;
                 stops[t].row = i;
+                
+                
+                    
                 stops[t].from = -1;
                 stops[t].g = DBL_MAX;//comprend pas
                 stops[t].n_len = 0;
                 stops[t].n = NULL;
-                ind[i][j] = t; // affecte a ind(i)(j) la valeur t = s_len-1
+                ind[i][j] = t;
+                // if(abs(stops[t].col-stops[t-1].col)+abs(stops[t].row-stops[t-1].row)<2)
+                // {
+                //     --s_len;
+
+                //     stops = (struct stop *)realloc(stops, s_len * sizeof(struct stop));
+                    
+                    
+                // }
+                 // affecte a ind(i)(j) la valeur t = s_len-1
             }
         }
     }
@@ -109,7 +134,7 @@ int main()
     {
         for (j = 1; j < map_size_cols - 1; j++)
         {
-            if (ind[i][j] >= 0)//verifie si c'est une case deja visité par stop ou déplacement possible
+            if (ind[i][j] >= 0)//verifie si c'est une case deja visité par stop où déplacement possible
             {
                 for (k = i - 1; k <= i + 1; k++)
                 {
@@ -242,8 +267,27 @@ int main()
             }
         }
     }
+    //print board ind
+     for (i = 0; i < map_size_rows; i++)
+    {
+        for (j = 0; j < map_size_cols; j++)
+        {
+            if (ind[i][j])
+            {
+                putchar(0xdb);
+            }
+            else
+            {
+               
+                    putchar('.');
+                
+            }
+        }
+        putchar('\n');
+    }
 
-    // PRINT BOARD
+    // PRINT BOARD map
+
     for (i = 0; i < map_size_rows; i++)
     {
         for (j = 0; j < map_size_cols; j++)
