@@ -65,25 +65,25 @@ void getTurnPlayer(Item *node) // fonction indiquant qui possède le trait
 void setAction(int *action) // fonction gérant le choix de l'utilisateur sur l'action à effectuer
 {
   printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
-  scanf("%d\n", action);
+  scanf("%d", action);
 }
 
 void setDirectionMove(int *directionMove)
 {
   printf("Donnez une direction de déplacement : 0-1-2-3 => Haut | Droite | Bas | Gauche \n");
-  scanf("%d\n", directionMove);
+  scanf("%d", directionMove);
 }
 
 void setPositionWall(int *positionWall)
 {
   printf("Donnez la position du mur à placer : \n");
-  scanf("%d\n", positionWall);
+  scanf("%d", positionWall);
 }
 
 void setDirectionWall(int *directionWall)
 {
   printf("Donnez la direction du mur à placer : \n");
-  scanf("%d\n", directionWall);
+  scanf("%d", directionWall);
 }
 
 void gameActionLoop(Item *node)
@@ -114,7 +114,7 @@ void gameActionLoop(Item *node)
       assert(directionMove > -1);
       assert(directionMove < 4);
 
-      movePlayer(node, node->player, directionMove);
+      movePlayer(node, 0, directionMove);
 
       printBoard(node);       // on affiche la grille après les modifications
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
@@ -130,7 +130,7 @@ void gameActionLoop(Item *node)
       setDirectionWall(&directionWall);
       printf("directionWall : %d\n", directionWall);
 
-      putWall(node, node->player, positionWall, directionWall);
+      putWall(node, 0, positionWall, directionWall);
 
       printBoard(node);
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
@@ -171,11 +171,11 @@ int main()
 
   // // minimax();
 
-  // printf("Finished!\n");
+  printf("Finished!\n");
 
-  // /* clean lists */
-  // cleanupList(&openList_p);
-  // cleanupList(&closedList_p);
+  /* clean lists */
+  cleanupList(&openList_p);
+  cleanupList(&closedList_p);
 
   return 0;
 }
