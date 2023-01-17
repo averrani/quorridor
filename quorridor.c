@@ -31,32 +31,67 @@ void showSolution(Item *goal)
   return;
 }
 
-/*
-int minimax(int isMax){
-  int value;
-  Item *cur_node = popFirst(&openList_p);
-  if(cur_node->depth == 0)
-    return cur_node->g; //heuristic
 
-  if(isMax){
-    value = -100000;
-    value = max(value, minimax(getChildBoard(cur_node, i)))
-
+int randIA(Item *node){
+  int i = rand() % 2; 
+  int d,p;
+  if(i == 0){
+    d = rand() % 4; 
+    switch (d)
+        {
+        case 0: //haut
+            if(isValidPosition(node,node->ia.pos -(2*WH_BOARD),1))
+              movePlayer(node, 1, d);
+            else randIA(node);
+            break;
+        case 1: //droite
+            if(isValidPosition(node,node->ia.pos + 2,1))
+              movePlayer(node, 1, d);
+            else randIA(node);
+            break;
+        case 2: //bas
+            if(isValidPosition(node,node->ia.pos + (2*WH_BOARD),1))
+              movePlayer(node, 1, d);
+            else randIA(node);
+            break;
+        case 3: //gauche
+            if(isValidPosition(node,node->ia.pos - 2,1))
+              movePlayer(node, 1, d);
+            else randIA(node);
+            break;
+        }
+    
+  }else{
+    p = rand() % MAX_BOARD;
+    d = rand() % 1;
+    if(isValidPositionWall(node, p, d))
+      putWall(node, 1, p, d);
+    else randIA(node);
   }
+  // int value;
+  // Item *cur_node = popFirst(&openList_p);
+  // if(cur_node->depth == 0)
+  //   return cur_node->g; //heuristic
+  // if(isMax){
+  //   value = -100000;
+  //   value = max(value, minimax(getChildBoard(cur_node, i)))
+  // }
+
+  switchPlayerTurn(node);
 }
-*/
+
 
 void switchPlayerTurn(Item *node) // fonction permettant de changer le trait de la partie
 {
-  if (node->player.turn == 0)
-    node->player.turn = 1;
-  else if (node->player.turn == 0)
-    node->player.turn = 0;
+  if (node->turn == 0)
+    node->turn = 1;
+  else if (node->turn == 1)
+    node->turn = 0;
 }
 
 void getTurnPlayer(Item *node) // fonction indiquant qui possède le trait
 {
-  if (node->player.turn == 0)
+  if (node->turn == 0)
     printf("C'est à l'humain de jouer \n");
   else
     printf("C'est à l'ia de jouer\n");
@@ -100,8 +135,15 @@ void gameActionLoop(Item *node)
   //cette deuxième valeur à indiquer est en fait la valeur de directionMove ou positionWall 
   //selon la valeur de action
 
-  while (1)
-  {
+  while (1){
+
+  if(evaluateBoard(node) == 1.0){
+    return;
+  }
+  if(node->turn == 1){ // a l'ia de jouer 
+    randIA(node);
+  }else{
+  
     setAction(&actionMove);
     printf("action : %d\n", actionMove);
 
@@ -136,10 +178,13 @@ void gameActionLoop(Item *node)
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
     }
   } 
+  }
 }
 
 int main()
 {
+
+  srand( time( NULL ) ); //tests ia
 
   /* init lists */
   initList(&openList_p);

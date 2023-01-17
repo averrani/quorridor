@@ -14,11 +14,10 @@ Item *initGame()
   node = nodeAlloc();
 
   node->player.pos = WH_BOARD*(WH_BOARD-1) + WH_BOARD/2;   // define pos of player
-  node->player.turn = 1;  // first turn to player
+  node->turn = 0;  // first turn to player
   node->player.wall = 10; // number of wall
 
   node->ia.pos = WH_BOARD/2; // define pos of ia
-  node->ia.turn = 0;  // first turn to player
   node->ia.wall = 10; // number of wall
 
   char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
@@ -84,16 +83,17 @@ void printBoard(Item *node)
 
 double evaluateBoard(Item *node)
 {
-  if (0 < node->player.pos < WH_BOARD)
+  if (node->player.pos >= 0 && node->player.pos < WH_BOARD)
   {
     printf("Player win");
     return 1;
   }
-  if (WH_BOARD*(WH_BOARD+1) <= node->ia.pos < WH_BOARD*WH_BOARD)
+  if (node->ia.pos >= WH_BOARD*(WH_BOARD+1) && node->ia.pos < MAX_BOARD)
   {
     printf("ia win");
     return 1;
   }
+  return 0;
 }
 
 // START CHANGE
@@ -128,16 +128,16 @@ int isValidPosition(Item *node, int pos, int player){
 
       if(pos == node->ia.pos) //test pr savoir si la case contient le joueur adverse
         return 2;
-      if(pos == node->player.pos + 2 && node->board[pos - 1] == -1 ){ // test pr savoir si y'a un mur a droite
+      if(pos == node->player.pos + 2 && node->board[pos - 1] == -1 && node->player.pos%WH_BOARD != WH_BOARD-1){ // test pr savoir si y'a un mur a droite
         return 1;
       }
-      if(pos == node->player.pos - 2 && node->board[pos + 1] == -1 ){ // test pr savoir si y'a un mur a gauche
+      if(pos == node->player.pos - 2 && node->board[pos + 1] == -1 && node->player.pos%WH_BOARD != 0){ // test pr savoir si y'a un mur a gauche
         return 1;
       }
-      if(pos == node->player.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en bas
+      if(pos == node->player.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 && node->player.pos/WH_BOARD != WH_BOARD-1){ // test pr savoir si y'a un mur en bas
         return 1;
       }
-      if(pos == node->player.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en haut
+      if(pos == node->player.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 && node->player.pos/WH_BOARD != 0){ // test pr savoir si y'a un mur en haut
         return 1;
       }
     }
@@ -150,16 +150,16 @@ int isValidPosition(Item *node, int pos, int player){
 
       if(pos == node->player.pos) //test pr savoir si la case contient le joueur adverse
         return 2;
-      if(pos == node->ia.pos + 2 && node->board[pos - 1] == -1 ){ // test pr savoir si y'a un mur a droite
+      if(pos == node->ia.pos + 2 && node->board[pos - 1] == -1 && node->ia.pos%WH_BOARD != WH_BOARD-1){ // test pr savoir si y'a un mur a droite et si on sort pas du board
         return 1;
       }
-      if(pos == node->ia.pos - 2 && node->board[pos + 1] == -1 ){ // test pr savoir si y'a un mur a gauche
+      if(pos == node->ia.pos - 2 && node->board[pos + 1] == -1 && node->ia.pos%WH_BOARD != 0){ // test pr savoir si y'a un mur a gauche
         return 1;
       }
-      if(pos == node->ia.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en bas
+      if(pos == node->ia.pos +(2*WH_BOARD) && node->board[pos - WH_BOARD] == -1 && node->ia.pos/WH_BOARD != WH_BOARD-1){ // test pr savoir si y'a un mur en bas
         return 1;
       }
-      if(pos == node->ia.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 ){ // test pr savoir si y'a un mur en haut
+      if(pos == node->ia.pos -(2*WH_BOARD) && node->board[pos + WH_BOARD] == -1 && node->ia.pos/WH_BOARD != 0){ // test pr savoir si y'a un mur en haut
         return 1;
       }
     }

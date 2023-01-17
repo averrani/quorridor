@@ -15,48 +15,47 @@ void movePlayer(Item *node, int player, int direction){
     if(player == 0){//correspond au joueur
     
         int tmp = node->player.pos; //garde l'ancienne position du joueur
-        //on ajoute l'exception si la position ou le joueur veut aller est celle de l'ia
         switch (direction)
         {
         case 0: //haut
-            if(node->player.pos/WH_BOARD != 0){
-                if(node->player.pos - 2*WH_BOARD == node->ia.pos){
-                    if((node->player.pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD){
-                        node->player.pos -= 4*WH_BOARD;
+            if(isValidPosition(node, node->player.pos - 2*WH_BOARD, 0)){
+                if(node->player.pos - 2*WH_BOARD == node->ia.pos){ //on ajoute l'exception si la position ou le joueur veut aller est celle de l'ia
+                    if((node->player.pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD){ // exception pour pas sortir du board en cas de jump
+                        node->player.pos -= 4*WH_BOARD; //jump
                     }else printf("deplacement impossible exception sortie board \n");
                 }else
                 node->player.pos -= 2*WH_BOARD; //on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
-            }else printf("deplacement impossible exception sortie board \n");
+            }else printf("Sortie de board");
             break;
         case 1: //droite
-            if(node->player.pos%WH_BOARD != WH_BOARD-1){
+            if(isValidPosition(node, node->player.pos +2, 0)){
                 if(node->player.pos + 2 == node->ia.pos){
                     if((node->player.pos + 4)/WH_BOARD == node->player.pos/WH_BOARD){
                         node->player.pos += 4;
                     }else printf("deplacement impossible exception sortie board \n");
                 }else
                 node->player.pos += 2; //on ajoute 2 a la position dans la grille pour passer sur la case a droite
-            }else printf("deplacement impossible exception sortie board \n");
+            }else printf("Sortie de board");
             break;
         case 2: // bas
-            if(node->player.pos/WH_BOARD != WH_BOARD-1){
+            if(isValidPosition(node, node->player.pos + 2*WH_BOARD, 0)){
                 if(node->player.pos + 2*WH_BOARD == node->ia.pos){
                     if((node->player.pos + 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD){
                         node->player.pos += 4*WH_BOARD;
                     }else printf("deplacement impossible exception sortie board \n");
                 }else
                 node->player.pos += 2*WH_BOARD; //on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
-            }else printf("deplacement impossible exception sortie board \n");
+            }else printf("Sortie de board");
             break;
         case 3: //gauche
-            if(node->player.pos%WH_BOARD != 0){
+            if(isValidPosition(node, node->player.pos -2, 0)){
                 if(node->player.pos - 2 == node->ia.pos){
                     if((node->player.pos - 4)/WH_BOARD == node->player.pos/WH_BOARD){
                         node->player.pos -= 4;
                     }else printf("deplacement impossible exception sortie board \n");
                 }else
                 node->player.pos -= 2; //on retire 2 a la position dans la grille pour passer sur la case a gauche
-            }else printf("deplacement impossible exception sortie board \n");
+            }else printf("Sortie de board");
             break;
         default:
             printf("Indiquez une valeur de déplacement comprise entre 0 et 3 \n");
@@ -98,7 +97,13 @@ void movePlayer(Item *node, int player, int direction){
 //player == 0 pour joueur
 //player == 1 pour ia
 void putWall(Item *node, int player, int position, int direction){
-    
+
+    if(player == 0 && isValidPositionWall(node, position, direction) == 0){
+        printf("position de mur non valide\n");
+        return;
+    }
+            
+
     //verifications primaires
     assert(node->board[position] == -1);
     if(player == 0)
