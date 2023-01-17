@@ -29,7 +29,7 @@ struct stop
     /* array of indexes of routes from this stop to neighbours in array of all routes */
     int *n;
     int n_len;
-    double f, g, h;
+    double f, g, h;//cout total, distance de l'arrivé, distance du départ 
     int from;
 };
 
@@ -85,7 +85,7 @@ int main()
                 stops[t].col = j;
                 stops[t].row = i;
                 stops[t].from = -1;
-                stops[t].g = DBL_MAX;
+                stops[t].g = DBL_MAX;//comprend pas
                 stops[t].n_len = 0;
                 stops[t].n = NULL;
                 ind[i][j] = t; // affecte a ind(i)(j) la valeur t = s_len-1
@@ -98,10 +98,10 @@ int main()
     /* index of finish stop */
     e = s_len - 1;
 
-    // Distance entre case stop(e) et case courante(i) stocker dans stop.h(i)
+    // Distance entre case stop(e)(l'arrivé) et case courante(i) stocker dans stop.h(i)
     for (i = 0; i < s_len; i++)
     {
-        stops[i].h = sqrt(pow(stops[e].row - stops[i].row, 2) + pow(stops[e].col - stops[i].col, 2));
+        stops[i].h = sqrt(pow(stops[e].row - stops[i].row, 2) + pow(stops[e].col - stops[i].col, 2)); //distance de l'arrivé de tous les points de stops
     }
 
     for (i = 1; i < map_size_rows - 1; i++)
@@ -118,14 +118,14 @@ int main()
                         {
                             continue;
                         }
-                        if (ind[k][l] >= 0)
+                        if (ind[k][l] >= 0)//incompréhensible
                         {
                             ++r_len;
                             routes = (struct route *)realloc(routes, r_len * sizeof(struct route));
                             int t = r_len - 1;
                             routes[t].x = ind[i][j];
                             routes[t].y = ind[k][l];
-                            routes[t].d = sqrt(pow(stops[routes[t].y].row - stops[routes[t].x].row, 2) + pow(stops[routes[t].y].col - stops[routes[t].x].col, 2));
+                            routes[t].d = sqrt(pow(stops[routes[t].y].row - stops[routes[t].x].row, 2) + pow(stops[routes[t].y].col - stops[routes[t].x].col, 2));//distance entre 
                             ++stops[routes[t].x].n_len;
                             stops[routes[t].x].n = (int *)realloc(stops[routes[t].x].n, stops[routes[t].x].n_len * sizeof(int));
                             stops[routes[t].x].n[stops[routes[t].x].n_len - 1] = t;
@@ -137,9 +137,9 @@ int main()
     }
 
     open[0] = s;
-    stops[s].g = 0;
-    stops[s].f = stops[s].g + stops[s].h;
-    found = 0;
+    stops[s].g = 0;//distance du départ et .h distance de l'arrivé
+    stops[s].f = stops[s].g + stops[s].h;//coût total des chemin
+    found = 0;//test si on est arruvé a destination
 
     while (o_len and not found)
     {
@@ -147,23 +147,23 @@ int main()
 
         for (i = 0; i < o_len; i++)
         {
-            if (stops[open[i]].f < min)
+            if (stops[open[i]].f < min)//regarde quel chemin à le cout le plus faible 
             {
-                current = open[i];
+                current = open[i];   //continue le deplacement du snake vers le coût le plus faible.
                 min = stops[open[i]].f;
             }
         }
 
-        if (current == e)
+        if (current == e) //regarde si on est arrivé à destination 
         {
-            found = 1;
+            found = 1;//definé qu'on a trouvé
 
             ++p_len;
             path = (int *)realloc(path, p_len * sizeof(int));
             path[p_len - 1] = current;
             while (stops[current].from >= 0)
             {
-                current = stops[current].from;
+                current = stops[current].from;//retrace le chemin dans le sens inverse (je crois)
                 ++p_len;
                 path = (int *)realloc(path, p_len * sizeof(int));
                 path[p_len - 1] = current;
