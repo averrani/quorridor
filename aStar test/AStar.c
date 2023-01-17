@@ -101,7 +101,8 @@ int main()
     // Distance entre case stop(e)(l'arrivé) et case courante(i) stocker dans stop.h(i)
     for (i = 0; i < s_len; i++)
     {
-        stops[i].h = sqrt(pow(stops[e].row - stops[i].row, 2) + pow(stops[e].col - stops[i].col, 2)); //distance de l'arrivé de tous les points de stops
+        /*nouvel formule : stops[i].h = (stops[e].row - stops[i].row) + (stops[e].col - stops[i].col);
+        */stops[i].h = sqrt(pow(stops[e].row - stops[i].row, 2) + pow(stops[e].col - stops[i].col, 2)); //distance de l'arrivé de tous les points de stops
     }
 
     for (i = 1; i < map_size_rows - 1; i++)
@@ -125,7 +126,8 @@ int main()
                             int t = r_len - 1;
                             routes[t].x = ind[i][j];
                             routes[t].y = ind[k][l];
-                            routes[t].d = sqrt(pow(stops[routes[t].y].row - stops[routes[t].x].row, 2) + pow(stops[routes[t].y].col - stops[routes[t].x].col, 2));//distance entre 
+                            /*nouvelle formule à utiliser ? : routes[t].d = (stops[routes[t].y].row - stops[routes[t].x].row) + (stops[routes[t].y].col - stops[routes[t].x].col);
+                            */routes[t].d = sqrt(pow(stops[routes[t].y].row - stops[routes[t].x].row, 2) + pow(stops[routes[t].y].col - stops[routes[t].x].col, 2));//distance entre 
                             ++stops[routes[t].x].n_len;
                             stops[routes[t].x].n = (int *)realloc(stops[routes[t].x].n, stops[routes[t].x].n_len * sizeof(int));
                             stops[routes[t].x].n[stops[routes[t].x].n_len - 1] = t;
@@ -141,20 +143,21 @@ int main()
     stops[s].f = stops[s].g + stops[s].h;//coût total des chemin
     found = 0;//test si on est arruvé a destination
 
-    while (o_len and not found)
+    while (o_len and not found)//tant que o_len =! NULL et found =! 1
     {
-        min = DBL_MAX;
+        min = DBL_MAX; //permet d'avoir la valeur max des doubles et donc tout nombre comparé a min pour la première fois prendra forcément la place de min.
 
         for (i = 0; i < o_len; i++)
         {
-            if (stops[open[i]].f < min)//regarde quel chemin à le cout le plus faible 
+            if (stops[open[i]].f < min )//regarde si le node qu'on regarde à un coût plus faible que celui actuel
             {
+                
                 current = open[i];   //continue le deplacement du snake vers le coût le plus faible.
                 min = stops[open[i]].f;
             }
         }
 
-        if (current == e) //regarde si on est arrivé à destination 
+        if (current == e)//regarde si on est arrivé à destination 
         {
             found = 1;//definé qu'on a trouvé
 
@@ -223,11 +226,12 @@ int main()
                 }
             }
 
-            if (b or (tempg < stops[routes[stops[current].n[i]].y].g))
+            if (b or (tempg < stops[routes[stops[current].n[i]].y].g))//??????????????????????????????????????
             {
                 stops[routes[stops[current].n[i]].y].from = current;
                 stops[routes[stops[current].n[i]].y].g = tempg;
                 stops[routes[stops[current].n[i]].y].f = stops[routes[stops[current].n[i]].y].g + stops[routes[stops[current].n[i]].y].h;
+                
 
                 if (b)
                 {
@@ -281,7 +285,13 @@ int main()
         for (i = p_len - 1; i >= 0; i--)
         {
             printf("(%1.0f, %1.0f)\n", stops[path[i]].col, stops[path[i]].row);
-        }
+        //     if (i>2)
+        //     {
+        //          printf("(%1.0f)\n",stops[path[i]].f-stops[path[i-2]].f);
+        // }
+            }
+            
+           
     }
 
     for (i = 0; i < s_len; ++i)
@@ -294,5 +304,6 @@ int main()
     free(open);
     free(closed);
 
+    
     return 0;
 }
