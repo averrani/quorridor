@@ -46,123 +46,114 @@ int minimax(int isMax){
 }
 */
 
-void switchPlayerTurn(int * player)//fonction permettant de changer le trait de la partie
+void switchPlayerTurn(Item *node) // fonction permettant de changer le trait de la partie
 {
-  if(*player == 0) *player = 1;
-  else if(*player == 0) *player = 0;
+  if (node->player.turn == 0)
+    node->player.turn = 1;
+  else if (node->player.turn == 0)
+    node->player.turn = 0;
 }
 
-void getTurnPlayer(int * player)//fonction indiquant qui possède le trait
+void getTurnPlayer(Item *node) // fonction indiquant qui possède le trait
 {
-  if(*player == 0) printf("C'est à l'humain de jouer \n");
-  else printf("C'est à l'ia de jouer\n");
+  if (node->player.turn == 0)
+    printf("C'est à l'humain de jouer \n");
+  else
+    printf("C'est à l'ia de jouer\n");
 }
 
-int getAction() //fonction gérant le choix de l'utilisateur sur l'action à effectuer
+void setAction(int *action) // fonction gérant le choix de l'utilisateur sur l'action à effectuer
 {
-  int action;
-
   printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
-  scanf("%d\n", &action);
-  printf("action : %d\n", action);
-
-  return action;
+  scanf("%d\n", action);
 }
 
-int getDirectionMove()//fonction gérant le choix de l'utilisateur sur la direction de déplacement
+void setDirectionMove(int *directionMove)
 {
-  int directionMove;
-  printf("Donnez une direction de déplacement : 0-1-2-3 => haut-droite-bas-gauche\n");
-  scanf("%d\n", &directionMove);
-  printf("directionMove : %d\n", directionMove);
-
-  return directionMove;
+  printf("Donnez une direction de déplacement : 0-1-2-3 => Haut | Droite | Bas | Gauche \n");
+  scanf("%d\n", directionMove);
 }
 
-int getPositionWall() //fonction gérant le choix de l'utilisateur sur la position du mur a poser
+void setPositionWall(int *positionWall)
 {
-  int positionWall;
-
-  printf("Donnez une position pour le mur\n");
-  scanf("%d\n", &positionWall);
-  printf("positionWall : %d\n", positionWall);
-
-  return positionWall;
+  printf("Donnez la position du mur à placer : \n");
+  scanf("%d\n", positionWall);
 }
 
-int getDirectionWall()
+void setDirectionWall(int *directionWall)
 {
-  int directionWall;
-  printf("Donnez une direction/orientation pour le mur : 0 => horizontal | 1 => vertical\n");
-  scanf("%d\n", &directionWall);
-  printf("directionWall : %d\n", directionWall);
-
-  return directionWall;
+  printf("Donnez la direction du mur à placer : \n");
+  scanf("%d\n", directionWall);
 }
 
 void gameActionLoop(Item *node)
 {
-  int player = 0; // indique le trait, si player = 0, c'est au joueur 1 de jouer, joueur 2 sinon
+  int actionMove;    // si action == 0, on deplace le pion, si action == 1, on place un mur
+  int directionMove; // Indique le sens de déplacement du joueur 0-1-2-3 : haut-droite-bas-gauche
+  int positionWall;  // indique la position du mur à placer
+  int directionWall; // indique la direction du mur à placer
 
-  int directionMove; // Indique le sens de déplacement du joueur 1-2-3-4 : haut-droite-bas-gauche
 
-  int action; // si action == 0, on deplace le pion, si action == 1, on met place un mur
 
-  int directionWall, positionWall; // indique la direction et la position du mur a placer
-  while (1)                // tant que l'utilisateur n'a pas choisit de quitter le jeu (exit == 1)
+  //dans la fonction de set Action, on demande d'indiquer une fois la valeur de action, 
+  //puis on doit indiquer une deuxième valeur qui n'est pas action...
+  //cette deuxième valeur à indiquer est en fait la valeur de directionMove ou positionWall 
+  //selon la valeur de action
+
+  while (1)
   {
-      getTurnPlayer(&player);
+    setAction(&actionMove);
+    printf("action : %d\n", actionMove);
 
-      action = getAction();
+  if (actionMove == 0) // si action == 0, on effectue le déplacement du pion
+    {
+      setDirectionMove(&directionMove); // directionMov NE S'ENREGISTRE PAS
+      printf("directionMove : %d\n", directionMove);
 
-      if(action == 0)
-      {
-        // si action == 0, on effectue le déplacement du pion
-        directionMove = getDirectionMove();
+      // on vérifie que le directionMove est une valeur exploitable
+      assert(directionMove > -1);
+      assert(directionMove < 4);
 
+      movePlayer(node, node->player, directionMove);
 
-        // on vérifie que le directionMove est une valeur exploitable
-        assert(directionMove > -1);
-        assert(directionMove < 4);
+      printBoard(node);       // on affiche la grille après les modifications
+      switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
+    }
 
-        movePlayer(node, player, directionMove);
+  else if (actionMove == 1) // si action == 1, on pose un mur
+    {
+        printf("Action = 1\n");
 
-        printBoard(node);//on affiche la grille après les modifications
-        switchPlayerTurn(&player); //on change le trait, c'est au tour du joueur 2 de jouer
-      }
+      setPositionWall(&positionWall);
+      printf("positionWall : %d\n", positionWall);
 
-      else if(action == 1)// si action == 1, on pose un mur
-      {
-        positionWall = getPositionWall();
-        
-        directionWall = getDirectionWall();
-        
-        putWall(node, positionWall, directionWall);
+      setDirectionWall(&directionWall);
+      printf("directionWall : %d\n", directionWall);
 
-        printBoard(node);
-        switchPlayerTurn(&player); // on change le trait, c'est au tour du joueur 2 de jouer
+      putWall(node, node->player, positionWall, directionWall);
 
-      }
-  }
+      printBoard(node);
+      switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
+    }
+  } 
 }
 
 int main()
 {
-  
+
   /* init lists */
   initList(&openList_p);
   initList(&closedList_p);
 
   printf("\nInitial:");
   Item *initial_state = initGame();
-  printBoard( initial_state );
+  printBoard(initial_state);
 
   printf("\nSearching ...\n");
 
   // movePlayer(initial_state, 1, 2);
   // printBoard( initial_state );
-  
-  
+
   // int i;
   // for(i =0; i<MAX_BOARD; i++){
   //   //printf("%d %d \n",i, isValidPositionWall(initial_state, i, 1));
