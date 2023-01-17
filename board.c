@@ -89,7 +89,7 @@ double evaluateBoard(Item *node)
     printf("Player win");
     return 1;
   }
-  if (305 < node->ia.pos < 322)
+  if (WH_BOARD*(WH_BOARD+1) <= node->ia.pos < WH_BOARD*WH_BOARD)
   {
     printf("ia win");
     return 1;
@@ -112,35 +112,6 @@ void initBoard(Item *node, char *board)
       node->board[i] = board[i];
     }
   }
-
-  if (board == NULL)
-  {
-
-  node->player.pos = WH_BOARD*(WH_BOARD+1) + WH_BOARD/2;  // define pos of player
-  node->player.turn = 1;  // first turn to player
-  node->player.wall = 10; // number of wall
-
-  node->ia.pos = WH_BOARD/2; // define pos of ia
-  node->ia.turn = 0;  // first turn to player
-  node->ia.wall = 10; // number of wall
-
-
-int ii, jj;
-  for (i=0; i<MAX_BOARD; i++) {
-    if(i%2 == 0){
-      node->board[i] = 0;
-    }
-    else
-      node->board[i] = -1;
-    ii = i / WH_BOARD;
-	  jj = i % WH_BOARD;
-
-    if((jj+1)%2 == 0){
-      node->board[i] = -1;
-    }
-  }
-  
-}
 }
 
 
@@ -202,10 +173,10 @@ int isValidPosition(Item *node, int pos, int player){
 int isValidPositionWall(Item *node, int pos, int dir){
   int i,j;
   if(dir == 0){//horizontal
-    if(node->board[pos-1] == -1 && node->board[pos] == -1 && node->board[pos+1] == -1 && node->board[pos+2] == -1){
+    if(node->board[pos-1] == -1 && node->board[pos] == -1 && node->board[pos+1] == -1 ){
       for(j=1; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
-          for(i=0; i<WH_BOARD/4; i++){ 
-            if(pos == (4 *i +1)+(j*WH_BOARD) || pos == (4 *i+2)+(j*WH_BOARD)){ //voir screen 
+          for(i=1; i<WH_BOARD; i=i+2){ 
+            if(pos == i +(j*WH_BOARD)){ //voir screen 
                 return 1;
             }
           }
@@ -215,10 +186,10 @@ int isValidPositionWall(Item *node, int pos, int dir){
     return 0;// ne pas enlever important
   }
   if(dir == 1){ //vertical
-    if(node->board[pos-WH_BOARD] == -1 && node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 && node->board[pos+(2*WH_BOARD)] == -1){
-      for(i=1; i<(WH_BOARD/2)+1 ; i++){ //parcours colonne
-          for(j=1; j<WH_BOARD; j=j+4){ // parcours lignes
-            if(pos == (2 *i -1)+(j*WH_BOARD) || pos == (2 *i-1)+((j+1)*WH_BOARD)){ //voir screen 
+    if(node->board[pos-WH_BOARD] == -1 && node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 ){
+      for(j=1; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
+          for(i=1; i<WH_BOARD; i=i+2){ 
+            if(pos == i +(j*WH_BOARD)){ //voir screen 
                 return 1;
             }
           }
@@ -235,19 +206,88 @@ Item *getChildBoard(Item *node, int pos)
 {
   Item *child_p = NULL;
 
-  if (isValidPosition(node, pos, 0))
+  if (isValidPosition(node, pos, 1) == 1) //deplacement normal 
   {
     /* allocate and init child node */
     child_p = nodeAlloc();
-    initBoard(child_p, NULL);
+    initBoard(child_p, node->board);
     /* Make move */
-    child_p->board[pos] = 1;
-    /* link child to parent for backtrack */
+    //permet de transformer la position en direction pour moveplayer
+    if(pos == node->player.pos + 2)
+      movePlayer(child_p, 1, 1);
+    if(pos == node->player.pos - 2)
+      movePlayer(child_p, 1, 3);
+    if(pos == node->player.pos - 2*WH_BOARD)
+      movePlayer(child_p, 1, 0);
+    if(pos == node->player.pos + 2*WH_BOARD)
+      movePlayer(child_p, 1, 2);
+
+    child_p->depth = node->depth +1 ;
+    
+		/* link child to parent for backtrack */
     child_p->parent = node;
-
-    /*incrémenter la profondeur de 1*/
-    child_p->depth++;
   }
+  if (isValidPosition(node, pos, 1) == 2) //deplacement en sautant par dessus le joueur
+  {
+    /* allocate and init child node */
+    child_p = nodeAlloc();
+    initBoard(child_p, node->board);
+    /* Make move */
+    //permet de transformer la position en direction pour moveplayer et teste si le joueur peut sauter sans changer de ligne/colonne
+    if(pos == node->player.pos + 2 && ((pos + 4)/WH_BOARD == node->player.pos/WH_BOARD)){
+      movePlayer(child_p, 1, 1);
+      movePlayer(child_p, 1, 1);
+    }
+    if(pos == node->player.pos - 2 && ((pos - 4)/WH_BOARD == node->player.pos/WH_BOARD)){
+      movePlayer(child_p, 1, 3);
+      movePlayer(child_p, 1, 3);
+    }
+      
+    if(pos == node->player.pos - 2*WH_BOARD && ((pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
+      movePlayer(child_p, 1, 0);
+      movePlayer(child_p, 1, 0);
+    }
+      
+    if(pos == node->player.pos + 2*WH_BOARD && ((pos + 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
+      movePlayer(child_p, 1, 2);
+      movePlayer(child_p, 1, 2);
+    }
+          
+    child_p->depth = node->depth +1 ;
+    
+		/* link child to parent for backtrack */
+    child_p->parent = node;
+  }
+  if (isValidPositionWall(node, pos, 0) == 1) //deplacement en sautant par dessus le joueur
+  {
+    /* allocate and init child node */
+    child_p = nodeAlloc();
+    initBoard(child_p, node->board);
+    /* Make move */
 
+    putWall(child_p, 1, pos, 0);
+    child_p->ia.wall = node->ia.wall - 1;
+
+    child_p->depth = node->depth +1 ;
+    
+		/* link child to parent for backtrack */
+    child_p->parent = node;
+  }
+  if (isValidPositionWall(node, pos, 1) == 1) //deplacement en sautant par dessus le joueur
+  {
+    /* allocate and init child node */
+    child_p = nodeAlloc();
+    initBoard(child_p, node->board);
+    /* Make move */
+    
+    putWall(child_p, 1, pos, 1);
+    //on decremente le nombre de murs
+    child_p->ia.wall = node->ia.wall - 1;
+
+    child_p->depth = node->depth +1 ;
+    
+		/* link child to parent for backtrack */
+    child_p->parent = node;
+  }
   return child_p;
 }
