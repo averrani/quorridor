@@ -67,40 +67,17 @@ void showSolution(Item *goal)
 
 
 int randIA(Item *node){
-  int i = rand() % 2; 
-  int d,p;
-  if(i == 0){
-    d = rand() % 4; 
-    switch (d)
-        {
-        case 0: //haut
-            if(isValidPosition(node,node->ia.pos -(2*WH_BOARD),1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 1: //droite
-            if(isValidPosition(node,node->ia.pos + 2,1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 2: //bas
-            if(isValidPosition(node,node->ia.pos + (2*WH_BOARD),1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 3: //gauche
-            if(isValidPosition(node,node->ia.pos - 2,1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        }
-    
-  }else{
-    p = rand() % MAX_BOARD;
-    if(isValidPositionWall(node, p))
+  int p = rand() % MAX_BOARD;
+
+  if (isValidPosition(node, p, 1))
+      moveIA(node, p);
+  else if(isValidPositionWall(node, p))
       putWall(node, 1, p);
-    else randIA(node);
-  }
+  else
+      randIA(node);
+  switchPlayerTurn(node);
+}
+
   // int value;
   // Item *cur_node = popFirst(&openList_p);
   // if(cur_node->depth == 0)
@@ -110,8 +87,6 @@ int randIA(Item *node){
   //   value = max(value, minimax(getChildBoard(cur_node, i)))
   // }
 
-  switchPlayerTurn(node);
-}
 
 // int bestMove; // coup optimal pour l'ia
 
@@ -209,9 +184,9 @@ void gameActionLoop(Item *node)
 
   while (1){
 
-  if(evaluateBoard(node) == 1.0){
-    return;
-  }
+  // if(evaluateBoard(node) == 1.0){
+  //   return;
+  // }
   if(node->turn == 1){ // a l'ia de jouer 
     randIA(node);
     printBoard(node);
@@ -229,7 +204,7 @@ void gameActionLoop(Item *node)
       assert(directionMove > -1);
       assert(directionMove < 4);
 
-      movePlayer(node, 0, directionMove);
+      movePlayer(node, directionMove);
 
       printBoard(node);       // on affiche la grille après les modifications
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
@@ -241,6 +216,8 @@ void gameActionLoop(Item *node)
 
       setPositionWall(&positionWall);
       printf("positionWall : %d\n", positionWall);
+      
+      node->player.wall --;
       
       putWall(node, 0, positionWall);
 

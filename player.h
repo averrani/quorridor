@@ -27,7 +27,9 @@ typedef struct Item_s {
 
 //player == 0 pour joueur
 //player == 1 pour ia
-void movePlayer(Item *node, int player, int direction);
+void movePlayer(Item *node, int direction);
+
+void moveIA(Item *node, int pos);
 
 //direction == 0 pour horizontal
 //direction == 1 pour vertical
