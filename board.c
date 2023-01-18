@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include "board.h"
 
 // Initialize a new Game for the nQueens problem: an empty board..
