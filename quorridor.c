@@ -11,6 +11,46 @@
 list_t openList_p;
 list_t closedList_p;
 
+void switchPlayerTurn(Item *node) // fonction permettant de changer le trait de la partie
+{
+  if (node->turn == 0)
+    node->turn = 1;
+  else if (node->turn == 1)
+    node->turn = 0;
+}
+
+void getTurnPlayer(Item *node) // fonction indiquant qui possède le trait
+{
+  if (node->turn == 0)
+    printf("C'est à l'humain de jouer \n");
+  else
+    printf("C'est à l'ia de jouer\n");
+}
+
+void setAction(int *action) // fonction gérant le choix de l'utilisateur sur l'action à effectuer
+{
+  printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
+  scanf("%d", action);
+}
+
+void setDirectionMove(int *directionMove)
+{
+  printf("Donnez une direction de déplacement : 0-1-2-3 => Haut | Droite | Bas | Gauche \n");
+  scanf("%d", directionMove);
+}
+
+void setPositionWall(int *positionWall)
+{
+  printf("Donnez la position du mur à placer : \n");
+  scanf("%d", positionWall);
+}
+
+void setDirectionWall(int *directionWall)
+{
+  printf("Donnez la direction du mur à placer : \n");
+  scanf("%d", directionWall);
+}
+
 void showSolution(Item *goal)
 {
   int i = 0, j;
@@ -71,7 +111,7 @@ int randIA(Item *node){
   // int value;
   // Item *cur_node = popFirst(&openList_p);
   // if(cur_node->depth == 0)
-  //   return cur_node->g; //heuristic
+  //   return cur_node; //heuristic
   // if(isMax){
   //   value = -100000;
   //   value = max(value, minimax(getChildBoard(cur_node, i)))
@@ -79,47 +119,85 @@ int randIA(Item *node){
 
   switchPlayerTurn(node);
 }
+// int bestMove; // coup optimal pour l'ia
+
+// int minmaxWithMov(Item * node ,int depth , int alpha , int beta){
+//     if (depth == 0 || evaluateBoard(node)!=0){
+//       return 0 ; // a refaire
+//     }
+//     if(node->turn == 1){
+//       int val;
+//       for (int i = 0; i < MAX_BOARD; i++){
+//         if(isValidPosition(node,i,1)){
+//           getChildBoard(node,i);
+//           switchPlayerTurn(node);
+//           val = minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta);
+//           if(val>alpha){
+//             alpha = val;
+//             bestMove = i;
+//           }
+//           if(beta<= alpha){
+//             break;
+//           }
+//         }
+
+//     }
+// }
+// else{
+//   for (int i = 0; i < MAX_BOARD; i++){
+//         if(isValidPosition(node,i,1)){
+//           getChildBoard(node,i);
+//           switchPlayerTurn(node);
+//           beta =min(beta,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+//           if(beta<= alpha){
+//             break;
+//           }
+//         }
+//   }
+//   return beta;
+// }
 
 
-void switchPlayerTurn(Item *node) // fonction permettant de changer le trait de la partie
-{
-  if (node->turn == 0)
-    node->turn = 1;
-  else if (node->turn == 1)
-    node->turn = 0;
-}
 
-void getTurnPlayer(Item *node) // fonction indiquant qui possède le trait
-{
-  if (node->turn == 0)
-    printf("C'est à l'humain de jouer \n");
-  else
-    printf("C'est à l'ia de jouer\n");
-}
+// }
+// int minimaxAlphaBeta(Item * node ,int depth , int alpha , int beta){
+//   if(depth == 0 || evaluateBoard(node)!= 0){
+//     return 0 ; // à faire 
+//   }
+//   if(node->turn == 1 ){ // c'est l'ia qui joue donc max 
+//      for (int i = 0; i < MAX_BOARD; i++){
+//         if(isValidPosition(node,i,1)){
+//           getChildBoard(node,i);
+//           switchPlayerTurn(node);
+//           alpha = max(alpha,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+//           if(beta <= alpha){
+//             break;
+//           }
+//           return alpha;
+//         }
+//      }
 
-void setAction(int *action) // fonction gérant le choix de l'utilisateur sur l'action à effectuer
-{
-  printf("Donnez une action a effectuer : 0 => Déplacer Joueur | 1 => Poser Mur \n");
-  scanf("%d", action);
-}
+//   }
+//   else{
+//     for (int i = 0; i < MAX_BOARD; i++){
+//         if(isValidPosition(node,i,0)){
+//           getChildBoard(node,i);
+//           switchPlayerTurn(node);
+//           alpha = min(alpha,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+//           if(beta <= alpha){
+//             break;
+//           }
+//           return beta;
+//         }
+//      }
 
-void setDirectionMove(int *directionMove)
-{
-  printf("Donnez une direction de déplacement : 0-1-2-3 => Haut | Droite | Bas | Gauche \n");
-  scanf("%d", directionMove);
-}
+//   }
 
-void setPositionWall(int *positionWall)
-{
-  printf("Donnez la position du mur à placer : \n");
-  scanf("%d", positionWall);
-}
+  
 
-void setDirectionWall(int *directionWall)
-{
-  printf("Donnez la direction du mur à placer : \n");
-  scanf("%d", directionWall);
-}
+
+// }
+
 
 void gameActionLoop(Item *node)
 {

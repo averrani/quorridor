@@ -5,7 +5,6 @@
 #include <malloc.h>
 
 #include "player.h"
-#include "item.h"
 #include "board.h"
 
 //player == 0 pour joueur

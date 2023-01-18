@@ -1,5 +1,8 @@
-#include "list.h"
+#ifndef BOARD_H
+#define BOARD_H
 
+#include "list.h"
+#include "player.h"
 
 #define RANDINIT()  srand(time(NULL))
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
@@ -18,3 +21,6 @@ Item *getChildBoard( Item *node, int pos );
 double evaluateBoard( Item *node );
 void printBoard( Item *board );
 int isValidPosition(Item *node, int pos, int player);
+int isValidPositionWall(Item *node, int pos, int dir);
+
+#endif 
