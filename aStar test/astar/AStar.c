@@ -6,12 +6,11 @@
 #include <iso646.h>
 /* add -lm to command line to compile with this header */
 #include <math.h>
-#include <board.h>
 
 #define map_size_rows 10
 #define map_size_cols 10
 
-char map[WH_BOARD][WH_BOARD] = {
+char map[map_size_rows][map_size_cols] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -79,10 +78,8 @@ void freestop(struct stop s)
     s.from = 0;
 }
 
-int aStar(char* node)
+int main()
 {
-    //  const char* map[WH_BOARD][WH_BOARD];
-
     int i, j, k, l, b, found;
     int p_len = 0;
     int *path = NULL;
@@ -99,22 +96,10 @@ int aStar(char* node)
     int r_len = 0;
     struct route *routes = NULL;
 
-    //copie node dans map
-        // for ( k = 0; i < MAX_BOARD; i++)
-        // {
-        //     map[i%WH_BOARD][i/WH_BOARD]=node->board[k];
-        // }
-        
-    
-    
-    
-
-    
-
     // affecte a ind(i)(j) une valeur t != de 0
-    for (i = 1; i < WH_BOARD - 1; i++)
+    for (i = 1; i < map_size_rows - 1; i++)
     {
-        for (j = 1; j < WH_BOARD - 1; j++)
+        for (j = 1; j < map_size_cols - 1; j++)
         {
             if (map[i][j] != 1)
             {
@@ -162,9 +147,9 @@ int aStar(char* node)
         {
             if (ind[i][j] >= 0) // verifie si c'est une case deja visité par stop où déplacement possible
             {
-                for (k = i - 1; k <= i + 1; k++) // gère quel type de déplacement est possible diagonale uniquement par es coté etc.
+                for (k = i - 2; k <= i + 2; k+=2) // gère quel type de déplacement est possible diagonale uniquement par es coté etc.
                 {
-                    for (l = j - 1; l <= j + 1; l++)
+                    for (l = j - 2; l <= j + 2; l+=2)
                     {
                         if ((k == i) and (l == j))
                         {
@@ -174,14 +159,15 @@ int aStar(char* node)
 
                         if ((k - i == 2 && l == j && map[k - 1][l] != 1) || (k - i == -2 && l == j && map[k + 1][l] != 1) || (l - j == 20 && i == k && map[k][l + 10]) || (l - j == 20 && i == k && map[k][l - 10]))
                         {
-                            printf("c");
+                            printf("c\n");
                         }
 
-                        if (abs(i - k) + abs(j - l) != 2)
+                        if (abs(i - k) + abs(j - l) ==4
+                        )
                         {
                             if (ind[k][l] >= 0)
                             {
-                                printf("b");
+                                printf("b\n");
                                 ++r_len;
                                 routes = (struct route *)realloc(routes, r_len * sizeof(struct route));
                                 int t = r_len - 1;
