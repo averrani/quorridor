@@ -87,12 +87,12 @@ double evaluateBoard(Item *node)
   if (node->player.pos >= 0 && node->player.pos < WH_BOARD)
   {
     printf("Player win");
-    return 1;
+    return -10;
   }
   if (node->ia.pos >= WH_BOARD*(WH_BOARD+1) && node->ia.pos < MAX_BOARD)
   {
     printf("ia win");
-    return 1;
+    return 10;
   } 
   return 0; 
 }
@@ -171,11 +171,12 @@ int isValidPosition(Item *node, int pos, int player){
 
 //dir = 0 horizontal
 //dir = 1 vertical
-int isValidPositionWall(Item *node, int pos, int dir){
+int isValidPositionWall(Item *node, int pos){
   int i,j;
-  if(dir == 0){//horizontal
-    if(node->board[pos-1] == -1 && node->board[pos] == -1 && node->board[pos+1] == -1 ){
-      for(j=1; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
+
+  if(node->board[pos+1] != -1 ){
+    if(node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 && node->board[pos+2*WH_BOARD] == -1 ){
+      for(j=0; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
           for(i=1; i<WH_BOARD; i=i+2){ 
             if(pos == i +(j*WH_BOARD)){ //voir screen 
                 return 1;
@@ -185,11 +186,10 @@ int isValidPositionWall(Item *node, int pos, int dir){
       return 0;
     }
     return 0;// ne pas enlever important
-  }
-  if(dir == 1){ //vertical
-    if(node->board[pos-WH_BOARD] == -1 && node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 ){
+  }else{
+    if(node->board[pos] == -1 && node->board[pos+1] == -1 && node->board[pos+2] == -1 ){
       for(j=1; j<WH_BOARD; j=j+2){ // on parcourt uniquement les lignes avec les -1 (murs)
-          for(i=1; i<WH_BOARD; i=i+2){ 
+          for(i=0; i<WH_BOARD; i=i+2){ 
             if(pos == i +(j*WH_BOARD)){ //voir screen 
                 return 1;
             }
@@ -202,93 +202,93 @@ int isValidPositionWall(Item *node, int pos, int dir){
 }
 
 
-// Return a new item where a new queen is added at position pos if possible. NULL if not valid
-Item *getChildBoard(Item *node, int pos)
-{
-  Item *child_p = NULL;
+// // Return a new item where a new queen is added at position pos if possible. NULL if not valid
+// Item *getChildBoard(Item *node, int pos)
+// {
+//   Item *child_p = NULL;
 
-  if (isValidPosition(node, pos, 1) == 1) //deplacement normal 
-  {
-    /* allocate and init child node */
-    child_p = nodeAlloc();
-    initBoard(child_p, node->board);
-    /* Make move */
-    //permet de transformer la position en direction pour moveplayer
-    if(pos == node->player.pos + 2)
-      movePlayer(child_p, 1, 1);
-    if(pos == node->player.pos - 2)
-      movePlayer(child_p, 1, 3);
-    if(pos == node->player.pos - 2*WH_BOARD)
-      movePlayer(child_p, 1, 0);
-    if(pos == node->player.pos + 2*WH_BOARD)
-      movePlayer(child_p, 1, 2);
+//   if (isValidPosition(node, pos, 1) == 1) //deplacement normal 
+//   {
+//     /* allocate and init child node */
+//     child_p = nodeAlloc();
+//     initBoard(child_p, node->board);
+//     /* Make move */
+//     //permet de transformer la position en direction pour moveplayer
+//     if(pos == node->player.pos + 2)
+//       movePlayer(child_p, 1, 1);
+//     if(pos == node->player.pos - 2)
+//       movePlayer(child_p, 1, 3);
+//     if(pos == node->player.pos - 2*WH_BOARD)
+//       movePlayer(child_p, 1, 0);
+//     if(pos == node->player.pos + 2*WH_BOARD)
+//       movePlayer(child_p, 1, 2);
 
-    child_p->depth = node->depth +1 ;
+//     child_p->depth = node->depth +1 ;
     
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }
-  if (isValidPosition(node, pos, 1) == 2) //deplacement en sautant par dessus le joueur
-  {
-    /* allocate and init child node */
-    child_p = nodeAlloc();
-    initBoard(child_p, node->board);
-    /* Make move */
-    //permet de transformer la position en direction pour moveplayer et teste si le joueur peut sauter sans changer de ligne/colonne
-    if(pos == node->player.pos + 2 && ((pos + 4)/WH_BOARD == node->player.pos/WH_BOARD)){
-      movePlayer(child_p, 1, 1);
-      movePlayer(child_p, 1, 1);
-    }
-    if(pos == node->player.pos - 2 && ((pos - 4)/WH_BOARD == node->player.pos/WH_BOARD)){
-      movePlayer(child_p, 1, 3);
-      movePlayer(child_p, 1, 3);
-    }
+// 		/* link child to parent for backtrack */
+//     child_p->parent = node;
+//   }
+//   if (isValidPosition(node, pos, 1) == 2) //deplacement en sautant par dessus le joueur
+//   {
+//     /* allocate and init child node */
+//     child_p = nodeAlloc();
+//     initBoard(child_p, node->board);
+//     /* Make move */
+//     //permet de transformer la position en direction pour moveplayer et teste si le joueur peut sauter sans changer de ligne/colonne
+//     if(pos == node->player.pos + 2 && ((pos + 4)/WH_BOARD == node->player.pos/WH_BOARD)){
+//       movePlayer(child_p, 1, 1);
+//       movePlayer(child_p, 1, 1);
+//     }
+//     if(pos == node->player.pos - 2 && ((pos - 4)/WH_BOARD == node->player.pos/WH_BOARD)){
+//       movePlayer(child_p, 1, 3);
+//       movePlayer(child_p, 1, 3);
+//     }
       
-    if(pos == node->player.pos - 2*WH_BOARD && ((pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
-      movePlayer(child_p, 1, 0);
-      movePlayer(child_p, 1, 0);
-    }
+//     if(pos == node->player.pos - 2*WH_BOARD && ((pos - 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
+//       movePlayer(child_p, 1, 0);
+//       movePlayer(child_p, 1, 0);
+//     }
       
-    if(pos == node->player.pos + 2*WH_BOARD && ((pos + 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
-      movePlayer(child_p, 1, 2);
-      movePlayer(child_p, 1, 2);
-    }
+//     if(pos == node->player.pos + 2*WH_BOARD && ((pos + 4*WH_BOARD)%WH_BOARD == node->player.pos%WH_BOARD)){
+//       movePlayer(child_p, 1, 2);
+//       movePlayer(child_p, 1, 2);
+//     }
           
-    child_p->depth = node->depth +1 ;
+//     child_p->depth = node->depth +1 ;
     
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }
-  if (isValidPositionWall(node, pos, 0) == 1) //deplacement en sautant par dessus le joueur
-  {
-    /* allocate and init child node */
-    child_p = nodeAlloc();
-    initBoard(child_p, node->board);
-    /* Make move */
+// 		/* link child to parent for backtrack */
+//     child_p->parent = node;
+//   }
+//   if (isValidPositionWall(node, pos, 0) == 1) //deplacement en sautant par dessus le joueur
+//   {
+//     /* allocate and init child node */
+//     child_p = nodeAlloc();
+//     initBoard(child_p, node->board);
+//     /* Make move */
 
-    putWall(child_p, 1, pos, 0);
-    child_p->ia.wall = node->ia.wall - 1;
+//     putWall(child_p, 1, pos, 0);
+//     child_p->ia.wall = node->ia.wall - 1;
 
-    child_p->depth = node->depth +1 ;
+//     child_p->depth = node->depth +1 ;
     
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }
-  if (isValidPositionWall(node, pos, 1) == 1) //deplacement en sautant par dessus le joueur
-  {
-    /* allocate and init child node */
-    child_p = nodeAlloc();
-    initBoard(child_p, node->board);
-    /* Make move */
+// 		/* link child to parent for backtrack */
+//     child_p->parent = node;
+//   }
+//   if (isValidPositionWall(node, pos, 1) == 1) //deplacement en sautant par dessus le joueur
+//   {
+//     /* allocate and init child node */
+//     child_p = nodeAlloc();
+//     initBoard(child_p, node->board);
+//     /* Make move */
     
-    putWall(child_p, 1, pos, 1);
-    //on decremente le nombre de murs
-    child_p->ia.wall = node->ia.wall - 1;
+//     putWall(child_p, 1, pos);
+//     //on decremente le nombre de murs
+//     child_p->ia.wall = node->ia.wall - 1;
 
-    child_p->depth = node->depth +1 ;
+//     child_p->depth = node->depth +1 ;
     
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }
-  return child_p;
-}
+// 		/* link child to parent for backtrack */
+//     child_p->parent = node;
+//   }
+//   return child_p;
+// }

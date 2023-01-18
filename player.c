@@ -95,39 +95,30 @@ void movePlayer(Item *node, int player, int direction){
 //direction == 1 pour vertical
 //player == 0 pour joueur
 //player == 1 pour ia
-void putWall(Item *node, int player, int position, int direction){
+void putWall(Item *node, int player, int pos){
 
-    if(player == 0 && isValidPositionWall(node, position, direction) == 0){
+    if(player == 0 && isValidPositionWall(node, pos) == 0){
         printf("position de mur non valide\n");
         return;
     }
-            
 
     //verifications primaires
-    assert(node->board[position] == -1);
+    assert(node->board[pos] == -1);
     if(player == 0)
-        assert(node->player.wall >= 0); 
+        //assert(node->player.wall >= 0); 
     if(player == 1)
         assert(node->ia.wall >= 0);  
 
-    switch (direction)
-    {
-    case 0: //horizontal
-        assert(node->board[position-1] == -1 && node->board[position] == -1 && node->board[position+1] == -1 ); // verifie que c'est un endroit pour murs
-        node->board[position-1] = -2;
-        node->board[position] = -2;
-        node->board[position+1] = -2;
-        break;
-    case 1: //vertical
-        assert(node->board[position-WH_BOARD] == -1 && node->board[position] == -1 && node->board[position+WH_BOARD] == -1 ); // verifie que c'est un endroit pour murs
-        node->board[position-WH_BOARD] = -2;
-        node->board[position] = -2;
-        node->board[position+WH_BOARD] = -2;
-        break;
-
-    default:
-        printf("Indiquez une valeur de direction comprise entre 0 et 1");
-        break;
+    if(node->board[pos+1] != -1){ //murs verticaux
+        assert(node->board[pos] == -1 && node->board[pos+WH_BOARD] == -1 && node->board[pos+2*WH_BOARD] == -1 ); // verifie que c'est un endroit pour murs
+        node->board[pos] = -2;
+        node->board[pos+WH_BOARD] = -2;
+        node->board[pos+ 2*WH_BOARD] = -2;
+    }else{ //murs horizontaux
+        assert(node->board[pos] == -1 && node->board[pos+1] == -1 && node->board[pos+2] == -1 ); // verifie que c'est un endroit pour murs
+        node->board[pos] = -2;
+        node->board[pos+1] = -2;
+        node->board[pos+2] = -2;
     }
 
     //on décrémente le nombre de mur restant à placer chez le joueur

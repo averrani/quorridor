@@ -21,6 +21,6 @@ Item *getChildBoard( Item *node, int pos );
 double evaluateBoard( Item *node );
 void printBoard( Item *board );
 int isValidPosition(Item *node, int pos, int player);
-int isValidPositionWall(Item *node, int pos, int dir);
+int isValidPositionWall(Item *node, int pos);
 
 #endif 
