@@ -142,6 +142,7 @@ void gameActionLoop(Item *node)
   }
   if(node->turn == 1){ // a l'ia de jouer 
     randIA(node);
+    printBoard(node);
   }else{
   
     setAction(&actionMove);

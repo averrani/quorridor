@@ -8,6 +8,7 @@ struct Item_s;
 typedef struct Item_s {
   Player player;
   Player ia;
+  int turn;
   int size; 
   char *board; // board is an array of small int
   int blank;
