@@ -79,6 +79,88 @@ int randIA(Item *node){
 
   switchPlayerTurn(node);
 }
+int bestMove; // coup optimal pour l'ia
+
+int minmaxWithMov(Item * node ,int depth , int alpha , int beta){
+    if (depth == 0 || evaluateBoard(node)!=0){
+      return 0 ; // a refaire
+    }
+    if(node->turn == 1){
+      int val;
+      for (int i = 0; i < MAX_BOARD; i++){
+        if(isValidPosition(node,i,1)){
+          getChildBoard(node,i);
+          switchPlayerTurn(node);
+          val = minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta);
+          if(val>alpha){
+            alpha = val;
+            bestMove = i;
+          }
+          if(beta<= alpha){
+            break;
+          }
+        }
+
+    }
+}
+else{
+  for (int i = 0; i < MAX_BOARD; i++){
+        if(isValidPosition(node,i,1)){
+          getChildBoard(node,i);
+          switchPlayerTurn(node);
+          beta =min(beta,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+          if(beta<= alpha){
+            break;
+          }
+        }
+  }
+  return beta;
+}
+
+
+
+}
+int minimaxAlphaBeta(Item * node ,int depth , int alpha , int beta){
+  if(depth == 0 || evaluateBoard(node)!= 0){
+    return 0 ; // à faire 
+  }
+  if(node->turn == 1 ){ // c'est l'ia qui joue donc max 
+     for (int i = 0; i < MAX_BOARD; i++){
+        if(isValidPosition(node,i,1)){
+          getChildBoard(node,i);
+          switchPlayerTurn(node);
+          alpha = max(alpha,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+          if(beta <= alpha){
+            break;
+          }
+          return alpha;
+        }
+     }
+
+  }
+  else{
+    for (int i = 0; i < MAX_BOARD; i++){
+        if(isValidPosition(node,i,0)){
+          getChildBoard(node,i);
+          switchPlayerTurn(node);
+          alpha = min(alpha,minimaxAlphaBeta(getChildBoard(node,i),depth-1,alpha,beta));
+          if(beta <= alpha){
+            break;
+          }
+          return beta;
+        }
+     }
+
+  }
+
+  
+
+
+}
+
+
+
+
 
 
 void switchPlayerTurn(Item *node) // fonction permettant de changer le trait de la partie
