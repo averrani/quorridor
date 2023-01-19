@@ -78,6 +78,35 @@ int randIA(Item *node){
   switchPlayerTurn(node);
 }
 
+int bestMove(Item *node){
+  int bestScore = -1000;
+  int bestMove;
+  int score;
+   for (int i = 0; i < MAX_BOARD; i++){
+    if(isValidPosition(node, i, 1) || isValidPositionWall(node, i)){ //teste si la position correspond a un move
+  
+      if(isValidPosition(node, i, 1))
+        moveIA(node, i);
+      else if(isValidPositionWall(node, i))
+        putWall(node,1, i);
+      
+      //remplacer par getchildboard ??
+    
+      //score = minimax(node);
+      if(score > bestScore){
+        bestScore = score;
+        bestMove = i;
+      } 
+    }
+  }
+  if(isValidPosition(node, bestMove, 1))
+    moveIA(node, bestMove);
+  else if(isValidPositionWall(node, bestMove))
+    putWall(node, 1, bestMove);
+  
+  switchPlayerTurn(node); 
+}
+
   // int value;
   // Item *cur_node = popFirst(&openList_p);
   // if(cur_node->depth == 0)
@@ -218,7 +247,7 @@ void gameActionLoop(Item *node)
       printf("positionWall : %d\n", positionWall);
       
       node->player.wall --;
-      
+
       putWall(node, 0, positionWall);
 
       printBoard(node);

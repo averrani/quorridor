@@ -207,7 +207,7 @@ Item *getChildBoard(Item *node, int pos)
 {
   Item *child_p = NULL;
 
-  if (isValidPosition(node, pos, 1) == 1) //deplacement normal 
+  if (isValidPosition(node, pos, 1)) //deplacement normal 
   {
     /* allocate and init child node */
     child_p = nodeAlloc();
@@ -221,7 +221,7 @@ Item *getChildBoard(Item *node, int pos)
     child_p->parent = node;
   }
 
-  if (isValidPositionWall(node, pos) == 1 && node->ia.wall > 0 ) //deplacement en sautant par dessus le joueur
+  if (isValidPositionWall(node, pos) && node->ia.wall > 0 ) //deplacement en sautant par dessus le joueur
   {
     /* allocate and init child node */
     child_p = nodeAlloc();
