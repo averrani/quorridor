@@ -45,12 +45,6 @@ void setPositionWall(int *positionWall)
   scanf("%d", positionWall);
 }
 
-void setDirectionWall(int *directionWall)
-{
-  printf("Donnez la direction du mur à placer : \n");
-  scanf("%d", directionWall);
-}
-
 void showSolution(Item *goal)
 {
   int i = 0, j;
@@ -73,41 +67,17 @@ void showSolution(Item *goal)
 
 
 int randIA(Item *node){
-  int i = rand() % 2; 
-  int d,p;
-  if(i == 0){
-    d = rand() % 4; 
-    switch (d)
-        {
-        case 0: //haut
-            if(isValidPosition(node,node->ia.pos -(2*WH_BOARD),1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 1: //droite
-            if(isValidPosition(node,node->ia.pos + 2,1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 2: //bas
-            if(isValidPosition(node,node->ia.pos + (2*WH_BOARD),1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        case 3: //gauche
-            if(isValidPosition(node,node->ia.pos - 2,1))
-              movePlayer(node, 1, d);
-            else randIA(node);
-            break;
-        }
-    
-  }else{
-    p = rand() % MAX_BOARD;
-    d = rand() % 1;
-    if(isValidPositionWall(node, p, d))
-      putWall(node, 1, p, d);
-    else randIA(node);
-  }
+  int p = rand() % MAX_BOARD;
+
+  if (isValidPosition(node, p, 1))
+      moveIA(node, p);
+  else if(isValidPositionWall(node, p))
+      putWall(node, 1, p);
+  else
+      randIA(node);
+  switchPlayerTurn(node);
+}
+
   // int value;
   // Item *cur_node = popFirst(&openList_p);
   // if(cur_node->depth == 0)
@@ -117,8 +87,7 @@ int randIA(Item *node){
   //   value = max(value, minimax(getChildBoard(cur_node, i)))
   // }
 
-  switchPlayerTurn(node);
-}
+
 // int bestMove; // coup optimal pour l'ia
 
 // int minmaxWithMov(Item * node ,int depth , int alpha , int beta){
@@ -215,9 +184,9 @@ void gameActionLoop(Item *node)
 
   while (1){
 
-  if(evaluateBoard(node) == 1.0){
-    return;
-  }
+  // if(evaluateBoard(node) == 1.0){
+  //   return;
+  // }
   if(node->turn == 1){ // a l'ia de jouer 
     randIA(node);
     printBoard(node);
@@ -235,7 +204,7 @@ void gameActionLoop(Item *node)
       assert(directionMove > -1);
       assert(directionMove < 4);
 
-      movePlayer(node, 0, directionMove);
+      movePlayer(node, directionMove);
 
       printBoard(node);       // on affiche la grille après les modifications
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
@@ -247,11 +216,10 @@ void gameActionLoop(Item *node)
 
       setPositionWall(&positionWall);
       printf("positionWall : %d\n", positionWall);
-
-      setDirectionWall(&directionWall);
-      printf("directionWall : %d\n", directionWall);
-
-      putWall(node, 0, positionWall, directionWall);
+      
+      node->player.wall --;
+      
+      putWall(node, 0, positionWall);
 
       printBoard(node);
       switchPlayerTurn(node); // on change le trait, c'est au tour du joueur 2 de jouer
@@ -280,11 +248,11 @@ int main()
 
   // int i;
   // for(i =0; i<MAX_BOARD; i++){
-  //   //printf("%d %d \n",i, isValidPositionWall(initial_state, i, 1));
+  //   printf("%d %d \n",i, isValidPositionWall(initial_state, i));
   // }
   // for(i =0; i<MAX_BOARD; i++){
-  //   if(isValidPositionWall(initial_state, i, 1))
-  //     putWall(initial_state,0,i,1);
+  //   if(isValidPositionWall(initial_state, i))
+  //     putWall(initial_state,0,i);
   // }
   // printBoard(initial_state);
 
