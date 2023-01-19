@@ -6,7 +6,7 @@ quorridor: quorridor.c board.o list.o player.o
 	gcc -o quorridor quorridor.c board.c list.c player.c
 
 graphicQuorridor: graphicQuorridor.c quorridor.c board.o list.o player.o
-	gcc -o graphicQuorridor graphicQuorridor.c  -lSDL2 -lSDL2_image
+	gcc -o graphicQuorridor graphicQuorridor.c `sdl-config --cflags --libs`
 
 testSDL: testSDL.c quorridor.c board.o list.o player.o
 	gcc -o testSDL testSDL.c 
@@ -40,3 +40,6 @@ clean:
 
 #make testSDL puis ./testSDL
 
+
+
+#-lSDL2 -lSDL2_image
