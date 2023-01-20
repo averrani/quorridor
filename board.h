@@ -16,9 +16,11 @@
 
 
 Item *initGame();
-void initBoard(Item *node, char *board);
+void initBoard(char *child, Item *node);
+void copyBoard(char *child, Item *node);
 Item *getChildBoard( Item *node, int pos );
-double evaluateBoard( Item *node );
+Item *getChildBoardPlayer(Item *node, int pos);
+int evaluateBoard( Item *node );
 void printBoard( Item *board );
 int isValidPosition(Item *node, int pos, int player);
 int isValidPositionWall(Item *node, int pos);

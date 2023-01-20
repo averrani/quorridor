@@ -29,12 +29,15 @@ typedef struct Item_s {
 //player == 1 pour ia
 void movePlayer(Item *node, int direction);
 
-void moveIA(Item *node, int pos);
+void moveIA(Item *node, int pos, int p);
 
 //direction == 0 pour horizontal
 //direction == 1 pour vertical
 //player == 0 pour joueur
 //player == 1 pour ia
 void putWall(Item *node, int player, int position);
+
+void UnputWall(Item *node, int player, int pos);
+
 
 #endif 
