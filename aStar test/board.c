@@ -326,6 +326,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
   {
     return 1;
   }
+  
 
   if (player == 1) // start at the end of the board
   {
@@ -492,6 +493,177 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin] = 0;
 
           return isPathAvailable(node, posorigin - WH_BOARD, player, 0);
+        }
+      }
+    }
+  }
+
+
+   if (player == 0) // start at the end of the board
+  {
+    if (lastmove == 0)
+    {
+      if (!evaluateBoard(node)) // je sais pas comment mettre un nombre d'itération max
+      {
+        if (isValidPosition(node, posorigin + WH_BOARD, 1))
+        {
+          node->board[posorigin + WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+        }
+        if (isValidPosition(node, posorigin + 2, 1))
+        {
+          node->board[posorigin + 2] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + 2, player, 1);
+        }
+
+        if (isValidPosition(node, posorigin - 2, 1))
+        {
+          node->board[posorigin - 2] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - 2, player, 2);
+        }
+
+        // aller en arriere
+        if (isValidPosition(node, posorigin - WH_BOARD, 1))
+        {
+          node->board[posorigin - WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+        }
+      }
+    }
+
+    if (lastmove == 1)
+    {
+      if (!evaluateBoard(node)) // je sais pas comment mettre un nombre d'itération max
+      {
+        int a = (int)rand() % 2;
+        if (isValidPosition(node, posorigin + WH_BOARD, 1))
+        {
+          node->board[posorigin + WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+        }
+        if (isValidPosition(node, posorigin + 2, 1))
+        {
+          node->board[posorigin + 2] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + 2, player, 1);
+        }
+
+        if (isValidPosition(node, posorigin - WH_BOARD, 1))
+        {
+          node->board[posorigin - WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+        }
+
+        // aller à droite == revenir sur nos pas
+        if (isValidPosition(node, posorigin - 2, 1))
+        {
+          node->board[posorigin - 2] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - 2, player, 2);
+        }
+      }
+    }
+
+    if (lastmove == 2)
+    {
+      if (!evaluateBoard(node)) // je sais pas comment mettre un nombre d'itération max
+      {
+        int a = (int)rand() % 2;
+        if (isValidPosition(node, posorigin + WH_BOARD, 1))
+        {
+          node->board[posorigin + WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+        }
+
+        if (isValidPosition(node, posorigin - WH_BOARD, 1))
+        {
+          node->board[posorigin - WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+        }
+
+        if (a == 1)
+        {
+          if (isValidPosition(node, posorigin - 2, 1))
+          {
+            node->board[posorigin - 2] = 1;
+            node->board[posorigin] = 0;
+
+            return isPathAvailable(node, posorigin - 2, player, 2);
+          }
+        }
+        else
+        {
+          if (isValidPosition(node, posorigin + 2, 1))
+          {
+            node->board[posorigin + 2] = 1;
+            node->board[posorigin] = 0;
+
+            return isPathAvailable(node, posorigin + 2, player, 1);
+          }
+        }
+      }
+    }
+
+    if (lastmove == 3)
+    {
+      if (!evaluateBoard(node)) // je sais pas comment mettre un nombre d'itération max
+      {
+        // un peu de rand pour faire genre c'est une ia
+        int a = (int)rand() % 2;
+        if (a == 1)
+        {
+          if (isValidPosition(node, posorigin - 2, 1))
+          {
+            node->board[posorigin - 2] = 1;
+            node->board[posorigin] = 0;
+
+            return isPathAvailable(node, posorigin - 2, player, 2);
+          }
+        }
+        else
+        {
+          if (isValidPosition(node, posorigin + 2, 1))
+          {
+            node->board[posorigin + 2] = 1;
+            node->board[posorigin] = 0;
+
+            return isPathAvailable(node, posorigin + 2, player, 1);
+          }
+        }
+
+        // pas envie de passer notre temps à aller derriere
+        if (isValidPosition(node, posorigin - WH_BOARD, 1))
+        {
+          node->board[posorigin - WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+        }
+        // aller tout droit = revenir sur nos pas
+        if (isValidPosition(node, posorigin + WH_BOARD, 1))
+        {
+          node->board[posorigin + WH_BOARD] = 1;
+          node->board[posorigin] = 0;
+
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
         }
       }
     }
