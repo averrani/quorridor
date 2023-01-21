@@ -98,63 +98,113 @@ void movePlayer(Item *node, int direction){
 void moveIA(Item *node, int pos, int p){
     
     int direction;
-    Player player;
-    if(p == 0)
-        player = node->ia;
-    else if(p == 1)
-        player = node->player;
-    
-    int tmp = player.pos; //garde l'ancienne position de l'ia
+    if(p == 0){
+    int tmp = node->ia.pos; //garde l'ancienne position de l'ia
 
-    if(pos == player.pos +2)
+    if(pos == node->ia.pos +2)
         direction = 1;
-    if(pos == player.pos -2)
+    if(pos == node->ia.pos -2)
         direction = 3;
-    if(pos == player.pos +2*WH_BOARD)
+    if(pos == node->ia.pos +2*WH_BOARD)
         direction = 2;
-    if(pos == player.pos -2*WH_BOARD)
+    if(pos == node->ia.pos -2*WH_BOARD)
         direction = 0;
 
     switch (direction)
     {
     case 0: // haut
-        if (player.pos - 2 * WH_BOARD == node->player.pos)
+        if (node->ia.pos - 2 * WH_BOARD == node->player.pos)
             { // on ajoute l'exception si la position ou le joueur veut aller est celle de l'ia
-                if ((player.pos - 4 * WH_BOARD) % WH_BOARD == player.pos % WH_BOARD) // exception pour pas sortir du board en cas de jump                                   
-                    player.pos -= 4 * WH_BOARD; // jump
+                if ((node->ia.pos - 4 * WH_BOARD) % WH_BOARD == node->ia.pos % WH_BOARD) // exception pour pas sortir du board en cas de jump                                   
+                    node->ia.pos -= 4 * WH_BOARD; // jump
             }
-            else player.pos -= 2 * WH_BOARD; // on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+            else node->ia.pos -= 2 * WH_BOARD; // on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
         break;
     case 1: // droite
-        if (player.pos + 2 == node->player.pos)
+        if (node->ia.pos + 2 == node->player.pos)
             {
-                if ((player.pos + 4) / WH_BOARD == player.pos / WH_BOARD)
-                    player.pos += 4;
+                if ((node->ia.pos + 4) / WH_BOARD == node->ia.pos / WH_BOARD)
+                    node->ia.pos += 4;
             }
-            else player.pos += 2; // on ajoute 2 a la position dans la grille pour passer sur la case a droite
+            else node->ia.pos += 2; // on ajoute 2 a la position dans la grille pour passer sur la case a droite
         break;
     case 2: // bas
-        if (player.pos + 2 * WH_BOARD == node->player.pos)
+        if (node->ia.pos + 2 * WH_BOARD == node->player.pos)
             {
-                if ((player.pos + 4 * WH_BOARD) % WH_BOARD == player.pos % WH_BOARD)
-                    player.pos += 4 * WH_BOARD;
+                if ((node->ia.pos + 4 * WH_BOARD) % WH_BOARD == node->ia.pos % WH_BOARD)
+                    node->ia.pos += 4 * WH_BOARD;
             }
-            else player.pos += 2 * WH_BOARD; // on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+            else node->ia.pos += 2 * WH_BOARD; // on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
         break;
     case 3: // gauche
-        if (player.pos - 2 == node->player.pos)
+        if (node->ia.pos - 2 == node->player.pos)
             {
-                if ((player.pos - 4) / WH_BOARD == player.pos / WH_BOARD)
-                    player.pos -= 4;
+                if ((node->ia.pos - 4) / WH_BOARD == node->ia.pos / WH_BOARD)
+                    node->ia.pos -= 4;
             }
-            else player.pos -= 2; // on retire 2 a la position dans la grille pour passer sur la case a gauche
+            else node->ia.pos -= 2; // on retire 2 a la position dans la grille pour passer sur la case a gauche
         break;
     default:
         break;
     }
     // change la position de l'ia sur le board
     node->board[tmp] = 0;
-    node->board[player.pos] = 2;
+    node->board[node->ia.pos] = 2;
+    }
+    else if(p == 1){
+    
+    int tmp = node->player.pos; //garde l'ancienne position de l'ia
+
+    if(pos == node->player.pos +2)
+        direction = 1;
+    if(pos == node->player.pos -2)
+        direction = 3;
+    if(pos == node->player.pos +2*WH_BOARD)
+        direction = 2;
+    if(pos == node->player.pos -2*WH_BOARD)
+        direction = 0;
+
+    switch (direction)
+    {
+    case 0: // haut
+        if (node->player.pos - 2 * WH_BOARD == node->ia.pos)
+            { // on ajoute l'exception si la position ou le joueur veut aller est celle de l'ia
+                if ((node->player.pos - 4 * WH_BOARD) % WH_BOARD == node->player.pos % WH_BOARD) // exception pour pas sortir du board en cas de jump                                   
+                    node->player.pos -= 4 * WH_BOARD; // jump
+            }
+            else node->player.pos -= 2 * WH_BOARD; // on enlève WH_BOARD a la position dans la grille pour monter sur la ligne au dessus
+        break;
+    case 1: // droite
+        if (node->player.pos + 2 == node->ia.pos)
+            {
+                if ((node->player.pos + 4) / WH_BOARD == node->player.pos / WH_BOARD)
+                    node->player.pos += 4;
+            }
+            else node->player.pos += 2; // on ajoute 2 a la position dans la grille pour passer sur la case a droite
+        break;
+    case 2: // bas
+        if (node->player.pos + 2 * WH_BOARD == node->ia.pos)
+            {
+                if ((node->player.pos + 4 * WH_BOARD) % WH_BOARD == node->player.pos % WH_BOARD)
+                    node->player.pos += 4 * WH_BOARD;
+            }
+            else node->player.pos += 2 * WH_BOARD; // on ajoute WH_BOARD a la position dans la grille pour passer sur la ligne au dessous
+        break;
+    case 3: // gauche
+        if (node->player.pos - 2 == node->ia.pos)
+            {
+                if ((node->player.pos - 4) / WH_BOARD == node->player.pos / WH_BOARD)
+                    node->player.pos -= 4;
+            }
+            else node->player.pos -= 2; // on retire 2 a la position dans la grille pour passer sur la case a gauche
+        break;
+    default:
+        break;
+    }
+    // change la position de l'ia sur le board
+    node->board[tmp] = 0;
+    node->board[node->player.pos] = 2;
+}
 }
 
 //direction == 0 pour horizontal
