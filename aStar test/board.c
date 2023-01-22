@@ -319,13 +319,18 @@ Item *getChildBoard(Item *node, int pos)
   return child_p;
 }
 
-int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // lastmove sert à savoir c'était quoi le dernier coup pour séviter qu'il tourne en rond en ne tournant que a droite par exemple *Mettre 0 pour la premiere fois on utilise la fonction pour l'instant fais uniquement pour le joueur commencant à la fin du board
+int isPathAvailable(Item *node, int posorigin, int player, int lastmove, int depth) // lastmove sert à savoir c'était quoi le dernier coup pour séviter qu'il tourne en rond en ne tournant que a droite par exemple *Mettre 0 pour la premiere fois on utilise la fonction pour l'instant fais uniquement pour le joueur commencant à la fin du board
 {                                                                        // 0 tout droit, 1 a gauche, 2 a droite,3 derriere
   // c'est une manière de prioriser certaines instructions plutot que d'autre
   if (evaluateBoard(node))
   {
     return 1;
   }
+  if (depth>10000)
+  {
+    return NULL;
+  }
+  
   
 
   if (player == 1) // start at the end of the board
@@ -339,14 +344,14 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 0,depth);
         }
         if (isValidPosition(node, posorigin - 2, 1))
         {
           node->board[posorigin - 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - 2, player, 1);
+          return isPathAvailable(node, posorigin - 2, player, 1,depth);
         }
 
         if (isValidPosition(node, posorigin + 2, 1))
@@ -354,7 +359,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + 2, player, 2);
+          return isPathAvailable(node, posorigin + 2, player, 2,depth);
         }
 
         // aller en arriere
@@ -363,7 +368,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 3,depth);
         }
       }
     }
@@ -378,14 +383,14 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 0,depth);
         }
         if (isValidPosition(node, posorigin - 2, 1))
         {
           node->board[posorigin - 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - 2, player, 1);
+          return isPathAvailable(node, posorigin - 2, player, 1,depth);
         }
 
         if (isValidPosition(node, posorigin + WH_BOARD, 1))
@@ -393,7 +398,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 3,depth);
         }
 
         // aller à droite == revenir sur nos pas
@@ -402,7 +407,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + 2, player, 2);
+          return isPathAvailable(node, posorigin + 2, player, 2,depth);
         }
       }
     }
@@ -417,7 +422,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 0,depth);
         }
 
         if (isValidPosition(node, posorigin + WH_BOARD, 1))
@@ -425,7 +430,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 3,depth);
         }
 
         if (a == 1)
@@ -435,7 +440,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin + 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin + 2, player, 2);
+            return isPathAvailable(node, posorigin + 2, player, 2,depth);
           }
         }
         else
@@ -445,7 +450,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin - 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin - 2, player, 1);
+            return isPathAvailable(node, posorigin - 2, player, 1,depth);
           }
         }
       }
@@ -464,7 +469,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin + 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin + 2, player, 2);
+            return isPathAvailable(node, posorigin + 2, player, 2,depth);
           }
         }
         else
@@ -474,7 +479,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin - 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin - 2, player, 1);
+            return isPathAvailable(node, posorigin - 2, player, 1,depth);
           }
         }
 
@@ -484,7 +489,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 3,depth);
         }
         // aller tout droit = revenir sur nos pas
         if (isValidPosition(node, posorigin - WH_BOARD, 1))
@@ -492,7 +497,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 0,depth);
         }
       }
     }
@@ -510,14 +515,14 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0,depth);
         }
         if (isValidPosition(node, posorigin + 2, 1))
         {
           node->board[posorigin + 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + 2, player, 1);
+          return isPathAvailable(node, posorigin + 2, player, 1,depth);
         }
 
         if (isValidPosition(node, posorigin - 2, 1))
@@ -525,7 +530,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - 2, player, 2);
+          return isPathAvailable(node, posorigin - 2, player, 2,depth);
         }
 
         // aller en arriere
@@ -534,7 +539,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3,depth);
         }
       }
     }
@@ -549,14 +554,14 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0,depth);
         }
         if (isValidPosition(node, posorigin + 2, 1))
         {
           node->board[posorigin + 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + 2, player, 1);
+          return isPathAvailable(node, posorigin + 2, player, 1,depth);
         }
 
         if (isValidPosition(node, posorigin - WH_BOARD, 1))
@@ -564,7 +569,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3,depth);
         }
 
         // aller à droite == revenir sur nos pas
@@ -573,7 +578,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - 2] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - 2, player, 2);
+          return isPathAvailable(node, posorigin - 2, player, 2,depth);
         }
       }
     }
@@ -588,7 +593,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0,depth);
         }
 
         if (isValidPosition(node, posorigin - WH_BOARD, 1))
@@ -596,7 +601,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3,depth);
         }
 
         if (a == 1)
@@ -606,7 +611,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin - 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin - 2, player, 2);
+            return isPathAvailable(node, posorigin - 2, player, 2,depth);
           }
         }
         else
@@ -616,7 +621,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin + 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin + 2, player, 1);
+            return isPathAvailable(node, posorigin + 2, player, 1,depth);
           }
         }
       }
@@ -635,7 +640,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin - 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin - 2, player, 2);
+            return isPathAvailable(node, posorigin - 2, player, 2,depth);
           }
         }
         else
@@ -645,7 +650,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
             node->board[posorigin + 2] = 1;
             node->board[posorigin] = 0;
 
-            return isPathAvailable(node, posorigin + 2, player, 1);
+            return isPathAvailable(node, posorigin + 2, player, 1,depth);
           }
         }
 
@@ -655,7 +660,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin - WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin - WH_BOARD, player, 3);
+          return isPathAvailable(node, posorigin - WH_BOARD, player, 3,depth);
         }
         // aller tout droit = revenir sur nos pas
         if (isValidPosition(node, posorigin + WH_BOARD, 1))
@@ -663,7 +668,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove) // last
           node->board[posorigin + WH_BOARD] = 1;
           node->board[posorigin] = 0;
 
-          return isPathAvailable(node, posorigin + WH_BOARD, player, 0);
+          return isPathAvailable(node, posorigin + WH_BOARD, player, 0,depth);
         }
       }
     }
