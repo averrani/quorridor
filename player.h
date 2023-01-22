@@ -24,6 +24,7 @@ typedef struct Item_s {
   struct Item_s *prev, *next; // needed for chained list 
 } Item;
 
+Item *nodeAlloc();
 
 //player == 0 pour joueur
 //player == 1 pour ia
@@ -37,7 +38,6 @@ void moveIA(Item *node, int pos, int p);
 //player == 1 pour ia
 void putWall(Item *node, int player, int position);
 
-void UnputWall(Item *node, int player, int pos);
 
 
 #endif 

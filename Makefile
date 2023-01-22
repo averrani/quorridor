@@ -1,14 +1,14 @@
-all: quorridor player.o board.o list.o 
+all: quorridor player.o board.o
 
-graphic: graphicQuorridor board.o list.o player.o
+graphic: graphicQuorridor board.o player.o
 
-quorridor: quorridor.c board.o list.o player.o
-	gcc -g -o quorridor quorridor.c board.c list.c player.c
+quorridor: quorridor.c board.o player.o
+	gcc -g -o quorridor quorridor.c board.c player.c
 
-graphicQuorridor: graphicQuorridor.c quorridor.c board.o list.o player.o
+graphicQuorridor: graphicQuorridor.c quorridor.c board.o player.o
 	gcc -o graphicQuorridor graphicQuorridor.c `sdl-config --cflags --libs`
 
-testSDL: testSDL.c quorridor.c board.o list.o player.o
+testSDL: testSDL.c quorridor.c board.o player.o
 	gcc -g -o testSDL testSDL.c 
 
 board.o: board.c board.h
@@ -16,9 +16,6 @@ board.o: board.c board.h
 
 player.o: player.c player.h
 	gcc -g -c player.c
-
-list.o: list.c list.h 
-	gcc -g -c list.c
 
 clean: 
 	rm *.o quorridor graphicQuorridor testSDL

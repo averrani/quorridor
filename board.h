@@ -1,7 +1,6 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include "list.h"
 #include "player.h"
 
 #define RANDINIT()  srand(time(NULL))
@@ -17,7 +16,6 @@
 
 Item *initGame();
 void initBoard(Item *child, Item *node);
-void copyBoard(char *child, Item *node);
 Item *getChildBoard( Item *node, int pos );
 Item *getChildBoardPlayer(Item *node, int pos);
 int evaluateBoard( Item *node );

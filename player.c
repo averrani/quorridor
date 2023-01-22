@@ -7,6 +7,22 @@
 #include "player.h"
 #include "board.h"
 
+Item *nodeAlloc()
+{
+  Item *node;
+
+  node = (Item *) malloc( sizeof(Item) );
+  assert(node);
+
+  node->board = NULL;
+  node->parent = NULL;
+  node->prev = NULL;
+  node->next = NULL;
+  node->f = node->g = node->h = (double)0.0;
+
+  return node;
+}
+
 //player == 0 pour joueur
 //player == 1 pour ia
 void movePlayer(Item *node, int direction){
@@ -241,23 +257,4 @@ void putWall(Item *node, int player, int pos){
     //pour l'ia on le fait dans getchildboard
     if(player == 0)
         node->player.wall--; 
-}
-
-
-void UnputWall(Item *node, int player, int pos){
-
-    if(node->board[pos+1] != -1){ //murs verticaux
-        node->board[pos] = -1;
-        node->board[pos+WH_BOARD] = -1;
-        node->board[pos+ 2*WH_BOARD] = -1;
-    }else{ //murs horizontaux
-        node->board[pos] = -1;
-        node->board[pos+1] = -1;
-        node->board[pos+2] = -1;
-    }
-
-    if(player == 0)
-        node->player.wall++; 
-    if(player == 1)
-        node->ia.wall++; 
 }

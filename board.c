@@ -125,22 +125,6 @@ void initBoard(Item *child, Item *node)
   child->ia.wall = node->ia.wall;
 }
 
-void copyBoard(char *child, Item *node)
-{
-  assert(child);
-  int i;
-
-  child = calloc(MAX_BOARD, sizeof(char));
-  if (node != NULL)
-  {
-    for (i = 0; i < MAX_BOARD; i++)
-    {
-      child[i] = node->board[i];
-    }
-  }
-
-}
-
 
 //player = 0 pour le joueur
 //player = 1 pour l'ia
