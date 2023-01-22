@@ -367,6 +367,46 @@ int minimax(Item *node, int depth, int isMax){
     }
 }
 
+int minimaxAlphaBeta(Item *node, int depth, int alpha, int beta, int isMax){
+  int i, bestScore;
+  Item *child_p;
+  if(evaluateBoard(node) != 0 || depth == 4){
+    return evaluateBoard(node);
+  }
+    
+  if(isMax){
+     bestScore = -1000;
+     for (i = 0; i < MAX_BOARD; i++){
+        child_p = nodeAlloc();
+        initBoard(child_p, node);
+        child_p = getChildBoard(node, i );
+        if (child_p != NULL) { // it's a valid child!
+          bestScore = max(minimaxAlphaBeta(child_p, depth+1, alpha, beta, 0), bestScore);
+          //elagage alpha beta 
+          alpha = max( alpha, bestScore);
+          if (beta <= alpha)
+              break;
+        }
+      }
+      return bestScore;
+    }else {
+      bestScore = 1000;
+      for (i = 0; i < MAX_BOARD; i++){
+        child_p = nodeAlloc();
+        initBoard(child_p, node);
+        child_p = getChildBoardPlayer(node, i);
+        if (child_p != NULL) { // it's a valid child!
+          bestScore = min(minimaxAlphaBeta(child_p, depth+1, alpha, beta, 1), bestScore);
+          // elagage alpha beta
+          beta = min(beta, bestScore);
+          if (beta <= alpha)
+             break;
+        }
+      }
+      return bestScore;
+    }
+}
+
 
 int bestMoveIA(Item *node){
   Item *child_p = nodeAlloc();
@@ -381,7 +421,7 @@ int bestMoveIA(Item *node){
       initBoard(child_p, node);
       child_p = getChildBoard(child_p, i );
       if (child_p != NULL) { // it's a valid child!
-        score = minimax(child_p, 0, 0);
+        score = minimaxAlphaBeta(child_p, 1, -1000, 1000, 0);
         if(score > bestScore){
           bestScore = score;
           bestMove = i;
@@ -390,8 +430,10 @@ int bestMoveIA(Item *node){
   }
   if(isValidPosition(node, bestMove, 1))
     moveIA(node, bestMove, 0);
-  else if(isValidPositionWall(node, bestMove))
+  else if(isValidPositionWall(node, bestMove)){
     putWall(node, 1, bestMove);
+    node->ia.wall--;
+  }
   
   node->turn = 0; 
 }
@@ -426,6 +468,7 @@ void gameActionLoop(Item *node)
   if(node->turn == 1){ // a l'ia de jouer 
     bestMoveIA(node);
     printBoard(node);
+    printf("%d\n", node->ia.wall);
   }else{
   
     setAction(&actionMove);
