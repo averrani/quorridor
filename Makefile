@@ -6,7 +6,7 @@ quorridor: quorridor.c board.o player.o
 	gcc -g -o quorridor quorridor.c board.c player.c
 
 graphicQuorridor: graphicQuorridor.c quorridor.c board.o player.o
-	gcc -o graphicQuorridor graphicQuorridor.c `sdl-config --cflags --libs`
+	gcc -o graphicQuorridor graphicQuorridor.c board.c player.c `sdl-config --cflags --libs`
 
 testSDL: testSDL.c quorridor.c board.o player.o
 	gcc -g -o testSDL testSDL.c 
