@@ -239,43 +239,34 @@ void moveIA(Item *node, int pos, int p)
 // direction == 1 pour vertical
 // player == 0 pour joueur
 // player == 1 pour ia
-void putWall(Item *node, int player, int position, int direction)
-{
-    Item *temp;
-    temp = node;
-    if (player == 0 && isValidPositionWall(temp, position, direction) == 0)
-    {
+void putWall(Item *node, int player, int pos){
 
+Item *temp;
+temp=node;
+    if(player == 0 && isValidPositionWall(temp, pos) == 0){
         printf("position de mur non valide\n");
         return;
     }
 
-    // verifications primaires
-    assert(temp->board[position] == -1);
-    if (player == 0)
-        assert(temp->player.wall >= 0);
-    if (player == 1)
-        assert(temp->ia.wall >= 0);
+    //verifications primaires
+    assert(temp->board[pos] == -1);
+    if(player == 0)
+        assert(temp->player.wall >= 0); 
+    if(player == 1)
+        assert(temp->ia.wall >= 0);  
 
-    switch (direction)
-    {
-    case 0:                                                                                                        // horizontal
-        assert(temp->board[position - 1] == -1 && temp->board[position] == -1 && temp->board[position + 1] == -1); // verifie que c'est un endroit pour murs
-        temp->board[position - 1] = -2;
-        temp->board[position] = -2;
-        temp->board[position + 1] = -2;
-        break;
-    case 1:                                                                                                                      // vertical
-        assert(temp->board[position - WH_BOARD] == -1 && temp->board[position] == -1 && temp->board[position + WH_BOARD] == -1); // verifie que c'est un endroit pour murs
-        temp->board[position - WH_BOARD] = -2;
-        temp->board[position] = -2;
-        temp->board[position + WH_BOARD] = -2;
-        break;
-
-    default:
-        printf("Indiquez une valeur de direction comprise entre 0 et 1");
-        break;
+    if(temp->board[pos+1] != -1){ //murs verticaux
+        assert(temp->board[pos] == -1 && temp->board[pos+WH_BOARD] == -1 && temp->board[pos+2*WH_BOARD] == -1 ); // verifie que c'est un endroit pour murs
+        temp->board[pos] = -2;
+        temp->board[pos+WH_BOARD] = -2;
+        temp->board[pos+ 2*WH_BOARD] = -2;
+    }else{ //murs horizontaux
+        assert(temp->board[pos] == -1 && temp->board[pos+1] == -1 && temp->board[pos+2] == -1 ); // verifie que c'est un endroit pour murs
+        temp->board[pos] = -2;
+        temp->board[pos+1] = -2;
+        temp->board[pos+2] = -2;
     }
+
     if (isPathAvailable(temp, temp->player.pos, player, 0, 0) == 0)
     {
         printf("vous pouvez pas mettre de mur ici");
@@ -286,9 +277,8 @@ void putWall(Item *node, int player, int position, int direction)
         printf("mur placé");
         node = temp;
     }
-
-    // on décrémente le nombre de mur restant à placer chez le joueur
-    // pour l'ia on le fait dans getchildboard
-    if (player == 0)
-        node->player.wall--;
+    //on décrémente le nombre de mur restant à placer chez le joueur
+    //pour l'ia on le fait dans getchildboard
+    if(player == 0)
+        node->player.wall--; 
 }
