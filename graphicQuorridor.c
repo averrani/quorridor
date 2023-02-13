@@ -239,6 +239,9 @@ int main()
   Item *initial_state = initGame();
   // printBoard(initial_state);
   // gameActionLoop(initial_state);
+  putWall(initial_state, 0, 45);
+  putWall(initial_state, 1, 7);
+
 
 
   SDL_Init(SDL_INIT_VIDEO);
@@ -256,7 +259,7 @@ int main()
   couleurCaseIa = SDL_MapRGB(fenetre->format, 60, 200, 10);
   couleurMur = SDL_MapRGB(fenetre->format, 60, 230, 230);
 
-  SDL_FillRect(fenetre, NULL, couleurFenetre); //on remplii la fenetre de la couleur couleurFenetre
+  SDL_FillRect(fenetre, NULL, couleurFenetre); //on rempli la fenetre de la couleur couleurFenetre
   SDL_Flip(fenetre); //on envoie dans la fenetre les modifications
 
   // Création des surfaces de jeu
@@ -275,10 +278,10 @@ int main()
   caseIa = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
   SDL_FillRect(caseIa, NULL, couleurCaseIa);
 
-  murVertical = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
+  murVertical = SDL_CreateRGBSurface(SDL_HWSURFACE, 5, 50, 32, 0, 0, 0, 0);
   SDL_FillRect(murVertical, NULL, couleurMur);
 
-  murHorizontal = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
+  murHorizontal = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 5, 32, 0, 0, 0, 0);
   SDL_FillRect(murHorizontal, NULL, couleurMur);
 
 
@@ -306,16 +309,18 @@ int main()
     ii = i / WH_BOARD;
     jj = i % WH_BOARD;
 
-      if((initial_state->board[i] == -2) && (i%2 == 0))
+      if((initial_state->board[i] == -2) && (i%2 == 0))//si un mur est présent dans le board, et qu'il est sur une case pair
       {
-        SDL_Rect *recMurVertical = initRect(ii*55, jj*55, 50, 50); //on crée un rectangle pour contenir la surface caseVide
-        SDL_BlitSurface(murVertical, NULL, fenetre, recMurVertical); //on copie la surface caseVide , ici définit a NULL, vers la fenêtre fenetre
+        SDL_Rect *recMurVertical = initRect(ii*55, jj*55, 50, 50); //on crée un rectangle pour contenir la surface caseVide : position x, y, hauteur, largeur
+        SDL_BlitSurface(murVertical, NULL, fenetre, recMurVertical); //on copie la surface murVertical , ici définit a NULL, vers la fenêtre fenetre
+        //on affiche la surface du mur vertical
       }
       
-      if((initial_state->board[i] == -2) && (i%2 == 1))
+      if((initial_state->board[i] == -2) && (i%2 == 1))//si un mur est présent dans le board, et qu'il est sur une case impair
       {
         SDL_Rect *recMurHorizontal = initRect(ii*55, jj*55, 50, 50); //on crée un rectangle pour contenir la surface caseVide
-        SDL_BlitSurface(murHorizontal, NULL, fenetre, recMurHorizontal); //on copie la surface caseVide , ici définit a NULL, vers la fenêtre fenetre
+        SDL_BlitSurface(murHorizontal, NULL, fenetre, recMurHorizontal); //on copie la surface murVertical , ici définit a NULL, vers la fenêtre fenetre
+        //on affiche la surface du mur vertical
       }
 
       if(initial_state->board[i] == 0)
@@ -326,14 +331,14 @@ int main()
 
       if(initial_state->board[i] == 1)
       {
-        SDL_Rect *recJoueur = initRect(ii*55, jj*(55), 50, 50); //on crée un rectangle pour contenir la surface joueur
-        SDL_BlitSurface(caseJoueur, NULL, fenetre, recJoueur); //on copie la surface caseVide , ici définit a NULL, vers la fenêtre fenetre
+        SDL_Rect *recJoueur = initRect(ii*(50+5), (jj-1)*(50+5)+50, 50, 50); //on crée un rectangle pour contenir la surface joueur
+        SDL_BlitSurface(caseJoueur, NULL, fenetre, recJoueur); //on copie la surface caseJoueur , ici définit a NULL, vers la fenêtre fenetre
       }
 
       if(initial_state->board[i] == 2)
       {
-        SDL_Rect *recIa = initRect(ii*55, jj*55, 50, 50); //on crée un rectangle pour contenir la surface joueur
-        SDL_BlitSurface(caseIa, NULL, fenetre, recIa); //on copie la surface caseVide , ici définit a NULL, vers la fenêtre fenetre
+        SDL_Rect *recIa = initRect(ii*(50+5), (jj-1)*(50+5)+50, 50, 50); //on crée un rectangle pour contenir la surface joueur
+        SDL_BlitSurface(caseIa, NULL, fenetre, recIa); //on copie la surface caseIa , ici définit a NULL, vers la fenêtre fenetre
       }
 
       // if(initial_state->player.pos == ((i*NB_CASE)+j))
