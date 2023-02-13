@@ -15,12 +15,14 @@ Item *nodeAlloc()
   assert(node);
 
   node->board = NULL;
-  node->parent = NULL;
-  node->prev = NULL;
-  node->next = NULL;
-  node->f = node->g = node->h = (double)0.0;
 
   return node;
+}
+
+void freeItem(Item *node )
+{
+  if (node && node->board) free(node->board);
+	if (node) free(node);
 }
 
 //player == 0 pour joueur

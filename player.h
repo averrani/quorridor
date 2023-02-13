@@ -10,21 +10,25 @@ typedef struct Player_s {
 } Player;
 
 struct Item_s;
- 
 typedef struct Item_s {
   Player player;
   Player ia;
   int turn;
-  int size; 
   char *board; // board is an array of small int
-  int blank;
-  float f, g, h; // cost, heuristic, ...
-  int depth;
-  struct Item_s *parent; // needed for tree structure in game search
-  struct Item_s *prev, *next; // needed for chained list 
 } Item;
 
+struct list{
+  int numElements;
+  Item *elt;
+  struct list *next;
+};
+typedef struct list list_t;
+
 Item *nodeAlloc();
+void freeItem(Item *node );
+void cleanupList( list_t *list );
+void initList( list_t *list_p );
+list_t * addListe(Item *e,list_t *l);
 
 //player == 0 pour joueur
 //player == 1 pour ia

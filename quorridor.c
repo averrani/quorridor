@@ -63,7 +63,7 @@ int randIA(Item *node){
 // int minimax(Item *node, int depth, int isMax){
 //   int i, bestScore;
 //   Item *child_p;
-//   if(evaluateBoard(node) != 0 || depth == 5){
+//   if(evaluateBoard(node) != 0){
 //     return evaluateBoard(node);
 //   }
     
@@ -92,41 +92,47 @@ int randIA(Item *node){
 //     }
 // }
 
+int p= 0;
 int minimaxAlphaBeta(Item *node, int depth, int alpha, int beta, int isMax){
   int i, bestScore;
   Item *child_p;
-  if(evaluateBoard(node) != 0 || depth == 4){
+  if(evaluateBoard(node) != 0 || depth == 5){
     return evaluateBoard(node);
   }
     
   if(isMax){
      bestScore = -1000;
      for (i = 0; i < MAX_BOARD; i++){
-        child_p = nodeAlloc();
-        initBoard(child_p, node);
+        
         child_p = getChildBoard(node, i );
+        p++;
         if (child_p != NULL) { // it's a valid child!
           bestScore = max(minimaxAlphaBeta(child_p, depth+1, alpha, beta, 0), bestScore);
+          //freeItem(node);
           //elagage alpha beta 
           alpha = max( alpha, bestScore);
           if (beta <= alpha)
               break;
         }
+        //freeItem(node);
       }
       return bestScore;
     }else {
       bestScore = 1000;
       for (i = 0; i < MAX_BOARD; i++){
-        child_p = nodeAlloc();
-        initBoard(child_p, node);
+
         child_p = getChildBoardPlayer(node, i);
+        p++;
+        
         if (child_p != NULL) { // it's a valid child!
           bestScore = min(minimaxAlphaBeta(child_p, depth+1, alpha, beta, 1), bestScore);
+          //freeItem(node);
           // elagage alpha beta
           beta = min(beta, bestScore);
           if (beta <= alpha)
              break;
         }
+        //freeItem(node);
       }
       return bestScore;
     }
@@ -134,19 +140,18 @@ int minimaxAlphaBeta(Item *node, int depth, int alpha, int beta, int isMax){
 
 
 int bestMoveIA(Item *node){
-  Item *child_p = nodeAlloc();
+  Item *child_p;
   int bestScore = -1000;
   int bestMove;
   int score;
 
   /* Copy first struct values into the second one */
-  initBoard(child_p,node);
   for (int i = 0; i < MAX_BOARD; i++){
-      child_p = nodeAlloc();
-      initBoard(child_p, node);
-      child_p = getChildBoard(child_p, i );
+      child_p = getChildBoard(node, i );
+      p++;
       if (child_p != NULL) { // it's a valid child!
         score = minimaxAlphaBeta(child_p, 1, -1000, 1000, 0);
+        //freeItem(node);
         // score = minimax(child_p, 1, 0);
         if(score > bestScore){
           bestScore = score;
@@ -154,6 +159,7 @@ int bestMoveIA(Item *node){
           printf("Best pos : %d \n", bestMove);
         } 
     }
+    //freeItem(node);
   }
   if(isValidPosition(node, bestMove, 1))
     moveIA(node, bestMove, 0);
@@ -184,7 +190,7 @@ void gameActionLoop(Item *node)
     printf("Player win \n");
     return;
   }
-  if (node->ia.pos >= WH_BOARD*(WH_BOARD+1) && node->ia.pos < MAX_BOARD)
+  if (node->ia.pos >= WH_BOARD*(WH_BOARD-1) && node->ia.pos < MAX_BOARD)
   {
     printf("ia win \n");
     return;
@@ -195,6 +201,7 @@ void gameActionLoop(Item *node)
   if(node->turn == 1){ // a l'ia de jouer 
     bestMoveIA(node);
     printBoard(node);
+    printf("%d\n", p);
   }else{
   
     setAction(&actionMove);
@@ -241,7 +248,6 @@ int main()
   srand( time( NULL ) ); //tests ia
 
   /* init lists */
-
   Item *initial_state = initGame();
   printBoard(initial_state);
 

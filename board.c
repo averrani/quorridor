@@ -10,8 +10,8 @@
 // Initialize a new Game for the nQueens problem: an empty board..
 Item *initGame()
 {
-
   int i, j;
+  int ii, jj;
   Item *node;
   node = nodeAlloc();
 
@@ -21,42 +21,24 @@ Item *initGame()
 
   node->ia.pos = WH_BOARD/2; // define pos of ia
   node->ia.wall = 10; // number of wall
-
-  char *initial = (char *)malloc(MAX_BOARD * sizeof(char));
-
-  int ii, jj;
+  
+  node->board = calloc(MAX_BOARD, sizeof(char));
+  
   for (i = 0; i < MAX_BOARD; i++)
   {
-    if (i % 2 == 0)
-    {
-      initial[i] = 0;
-    }
-    else
-      initial[i] = -1;
     ii = i / WH_BOARD;
     jj = i % WH_BOARD;
 
+    if (i % 2 == 0)
+      node->board[i] = 0;
+    else
+      node->board[i] = -1;
+
     if ((jj + 1) % 2 == 0)
-    {
-      initial[i] = -1;
-    }
+      node->board[i] = -1;
   }
-  initial[node->player.pos] = 1;
-  initial[node->ia.pos] = 2;
-
-  assert(node);
-
-  node->size = MAX_BOARD;
-  node->board = calloc(MAX_BOARD, sizeof(char));
-  if (initial != NULL)
-  {
-    for (i = 0; i < MAX_BOARD; i++)
-    {
-      node->board[i] = initial[i];
-    }
-  }
-
-  node->depth = 0;
+  node->board[node->player.pos] = 1;
+  node->board[node->ia.pos] = 2;
 
   return node;
 }
@@ -97,9 +79,9 @@ void printBoard(Item *node)
 int evaluateBoard(Item *node)
 {
   if (node->player.pos >= 0 && node->player.pos < WH_BOARD)
-    return -10;
-  if (node->ia.pos >= WH_BOARD*(WH_BOARD+1) && node->ia.pos < MAX_BOARD)
-    return 10;
+    return -1;
+  if (node->ia.pos >= WH_BOARD*(WH_BOARD-1) && node->ia.pos < MAX_BOARD)
+    return 1;
   return 0; 
 }
 
@@ -107,7 +89,7 @@ int evaluateBoard(Item *node)
 //  initialize node's state from a given board
 void initBoard(Item *child, Item *node)
 {
-  //assert(child);
+  assert(child);
   int i;
 
   // child->size = MAX_BOARD;
@@ -218,75 +200,45 @@ int isValidPositionWall(Item *node, int pos){
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard(Item *node, int pos)
 {
-  Item *child_p = NULL;
-  
+  Item *child_p;
   if (isValidPosition(node, pos, 1)) //deplacement normal 
   {
-    /* allocate and init child node */
     child_p = nodeAlloc();
     initBoard(child_p, node);
     /* Make move */
     moveIA(child_p, pos, 0);
-
-    child_p->depth = node->depth +1 ;
-    
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }else
-
+    return child_p;
+  }
   if (isValidPositionWall(node, pos) && node->ia.wall > 0 ) //deplacement en sautant par dessus le joueur
   {
-    /* allocate and init child node */
     child_p = nodeAlloc();
     initBoard(child_p, node);
     /* Make move */
-
     putWall(child_p, 1, pos);
-    child_p->ia.wall = node->ia.wall - 1;
-
-    child_p->depth = node->depth +1 ;
-    
-		/* link child to parent for backtrack */
-    child_p->parent = node;
+    child_p->ia.wall = child_p->ia.wall - 1;
+    return child_p;
   }
-
-  return child_p;
+  return NULL;
 }
 
 Item *getChildBoardPlayer(Item *node, int pos)
 {
-  Item *child_p = NULL;
-  int direction;
+  Item *child_p;
   if (isValidPosition(node, pos, 0)) //deplacement normal 
   {
-    /* allocate and init child node */
     child_p = nodeAlloc();
     initBoard(child_p, node);
     /* Make move */
-    
     moveIA(child_p, pos, 1);
-
-    child_p->depth = node->depth +1 ;
-    
-		/* link child to parent for backtrack */
-    child_p->parent = node;
-  }else
-
+    return child_p;
+  }
   if (isValidPositionWall(node, pos) && node->player.wall > 0 ) 
   {
-    /* allocate and init child node */
     child_p = nodeAlloc();
     initBoard(child_p, node);
     /* Make move */
-
     putWall(child_p, 0, pos);
-
-    child_p->depth = node->depth +1 ;
-    
-		/* link child to parent for backtrack */
-    child_p->parent = node;
+    return child_p;
   }
-
-  return child_p;
+  return NULL;
 }
-
