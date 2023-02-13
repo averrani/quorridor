@@ -290,8 +290,15 @@ Item *getChildBoardPlayer(Item *node, int pos)
   return child_p;
 }
 
+// lastmove sert à savoir c'était quoi le dernier coup pour séviter qu'il tourne en rond en ne tournant que a droite par exemple *Mettre 0 pour la premiere fois on utilise la fonction pour l'instant fais uniquement pour le joueur commencant à la fin du board
+// 0 tout droit, 1 a gauche, 2 a droite,3 derriere
 
-
+/*posorigin : position du joueur
+  player :  IA ou joueur
+  lastmove : set to 0 for first loop
+  depth: set to 0 for first loop
+  node : node to test 
+*/
 int isPathAvailable(Item *node, int posorigin, int player, int lastmove, int depth) //node
 {                                                                        
   // c'est une manière de prioriser certaines instructions plutot que d'autre
@@ -647,3 +654,4 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove, int dep
     }
   }
 }
+

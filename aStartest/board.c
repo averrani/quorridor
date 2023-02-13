@@ -337,7 +337,7 @@ int isPathAvailable(Item *node, int posorigin, int player, int lastmove, int dep
   }
   if (depth>10000)
   {
-    return NULL;
+    return 0;
   }
   
   
