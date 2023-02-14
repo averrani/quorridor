@@ -269,6 +269,7 @@ temp=node;
 
     if (isPathAvailable(temp, temp->player.pos, player, 0, 0) == 0)
     {
+        printf("vous pouvez pas mettre de mur ici");
         return;
     }
     else
