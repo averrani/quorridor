@@ -278,10 +278,10 @@ int main()
   caseIa = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
   SDL_FillRect(caseIa, NULL, couleurCaseIa);
 
-  murVertical = SDL_CreateRGBSurface(SDL_HWSURFACE, 5, 50, 32, 0, 0, 0, 0);
+  murVertical = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
   SDL_FillRect(murVertical, NULL, couleurMur);
 
-  murHorizontal = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 5, 32, 0, 0, 0, 0);
+  murHorizontal = SDL_CreateRGBSurface(SDL_HWSURFACE, 50, 50, 32, 0, 0, 0, 0);
   SDL_FillRect(murHorizontal, NULL, couleurMur);
 
 
@@ -331,13 +331,13 @@ int main()
 
       if(initial_state->board[i] == 1)
       {
-        SDL_Rect *recJoueur = initRect(ii*(50+5), (jj-1)*(50+5)+50, 50, 50); //on crée un rectangle pour contenir la surface joueur
+        SDL_Rect *recJoueur = initRect(ii*(50+5), (jj-1)*(50+5)+55, 50, 50); //on crée un rectangle pour contenir la surface joueur
         SDL_BlitSurface(caseJoueur, NULL, fenetre, recJoueur); //on copie la surface caseJoueur , ici définit a NULL, vers la fenêtre fenetre
       }
 
       if(initial_state->board[i] == 2)
       {
-        SDL_Rect *recIa = initRect(ii*(50+5), (jj-1)*(50+5)+50, 50, 50); //on crée un rectangle pour contenir la surface joueur
+        SDL_Rect *recIa = initRect(ii*(50+5), (jj-1)*(50+5)+55, 50, 50); //on crée un rectangle pour contenir la surface joueur
         SDL_BlitSurface(caseIa, NULL, fenetre, recIa); //on copie la surface caseIa , ici définit a NULL, vers la fenêtre fenetre
       }
 
